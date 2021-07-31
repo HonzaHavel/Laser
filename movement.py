@@ -2,6 +2,7 @@ class movement:
     def __init__(self, canvasName, circle_object, line_x, line_y):
     	self.x = 0
     	self.y = 0
+    	self.F = 1000 #mm/min
     	self.canvasName = canvasName
     	self.circle = circle_object
     	self.line_x = line_x
@@ -102,3 +103,6 @@ class movement:
     		print ("1")
     	else:
     		pass
+
+    def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
+    	self.F = feedrate

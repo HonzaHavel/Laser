@@ -2,6 +2,7 @@ from tkinter import *
 import visual
 from movement import movement
 
+Z = False
 
 root = Tk()
 root.resizable(width=False, height=False)
@@ -46,8 +47,14 @@ root.bind("<KeyPress-Up>",lambda e: m.move_up())
 root.bind("<KeyPress-Down>",lambda e: m.move_down())
 root.bind("<KeyRelease>", lambda e: m.Stop())
 
-def get_pos():
+def laser_toggle():
 	visual.draw(circle, canvas, "red2")
+	root.after(20, laser_toggle)
+
+if Z == True:
+	root.after(20, laser_toggle)
+
+def get_pos():
 	idk = m.get_coords()
 	print(idk)
 	print(type(idk))

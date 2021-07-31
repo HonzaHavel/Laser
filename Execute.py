@@ -1,8 +1,8 @@
-from ISO import *			#might not be needed - just fotr test
+from ISO import *			#might not be needed - just for test
 							#inherit movement through canvas
 class Execute:				#will be executed by button in canvas - executin dictionary from process return
-	def __init__(self):		#execute will be checking for variable changed by stop button 
-		pass
+	def __init__(self,movement, Z, F):		#execute will be checking for variable changed by stop button 
+		self.Z = Z
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -17,7 +17,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			value = command['Z']
 			Z(value)
 
-		if 'X' in command or 'Z' in command:
+		if 'X' in command or 'Y' in command:
 			move_to_pos(float(command['X']), float(command['Y']))
 
 	def G(self, value):
@@ -25,15 +25,14 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			print("what now? :D")
 
 	def F(self, feedrate):
-		#change feedrate - maybe by adding value in movement and changing it everytime
-		pass
+		return (movement.change_feedrate(feedrate))
 
 	def Z(self, state):
 		if state == 10: #laser off
-			pass
+			return (self.Z = False)
 
 		elif state == 0: #laser on
-			pass 
+			return (self.Z = True)
 
 	def move_to_pos(self, x, y):
 		#well move damn it

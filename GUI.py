@@ -24,3 +24,9 @@ class GUI:
 		print (toReturn)
 		##return toReturn
 """
+
+#to canvas maybe
+
+while sumbutton == 1:
+	Execute.Exe_ISO(ISO.Process(Input_line()))
+	ISO.Add_count()
