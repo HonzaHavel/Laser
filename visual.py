@@ -32,3 +32,12 @@ def create_line_y(circle_pos, canvasName, color):
     y3 = (-abs(int(height)))
 
     return(canvasName.create_line(x2, y2, x3, y3, fill = color))
+
+def draw(circle_object, canvasName, color):
+	pos = canvasName.coords(circle_object)
+	x0 = pos[0] + 4.5
+	y0 = pos[1] + 4.5
+	x1 = pos[2] - 4.5
+	y1 = pos[3] - 4.5
+
+	return canvasName.create_oval(x0, y0, x1, y1, fill = color)

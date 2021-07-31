@@ -47,6 +47,7 @@ root.bind("<KeyPress-Down>",lambda e: m.move_down())
 root.bind("<KeyRelease>", lambda e: m.Stop())
 
 def get_pos():
+	visual.draw(circle, canvas, "red2")
 	idk = m.get_coords()
 	print(idk)
 	print(type(idk))
