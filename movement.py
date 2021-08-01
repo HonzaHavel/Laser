@@ -1,5 +1,6 @@
 class movement:
     def __init__(self, canvasName, circle_object, line_x, line_y):
+    	self.absolute_position = {}
     	self.x = 0
     	self.y = 0
     	self.F = 1000 #mm/min
@@ -104,5 +105,11 @@ class movement:
     	else:
     		pass
 
+    def get_absolute_position(self):
+    	pos = self.get_coords()
+    	self.absolute_position['X'] = pos[0] + 5
+    	self.absolute_position['Y'] = pos[1] + 5
+    	return self.absolute_position
+    	
     def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
     	self.F = feedrate

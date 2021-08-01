@@ -1,7 +1,7 @@
 from ISO import *			#might not be needed - just for test
 							#inherit movement through canvas
 class Execute:				#will be executed by button in canvas - executin dictionary from process return
-	def __init__(self,movement, Z, F):		#execute will be checking for variable changed by stop button 
+	def __init__(self,movement, Z):		#execute will be checking for variable changed by stop button 
 		self.Z = Z
 
 	def Exe_ISO(self, command):

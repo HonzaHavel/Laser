@@ -56,8 +56,9 @@ if Z == True:
 
 def get_pos():
 	idk = m.get_coords()
-	print(idk)
-	print(type(idk))
+	pos = m.get_absolute_position()
+	print(pos)
+	#print(type(idk))
 	root.after(20, get_pos)
 
 root.after(20, get_pos)
