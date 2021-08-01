@@ -37,3 +37,8 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 	def move_to_pos(self, x, y):
 		#well move damn it
 		pass
+
+	def count_steps(self, x, y):
+		pos = movement.get_absolute_position()
+		steps_x = x - pos['X']
+		steps_y = y - pos['Y']
