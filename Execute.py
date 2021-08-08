@@ -36,4 +36,25 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 	def move_to_pos(self, x, y):
 		#well move damn it
-		pass
+		#z tabule to bude funkcni jen pro simulaci
+		#motory musi krokovat u sikmo, takze treba 2x na 1y
+		#kontrolovat co je mensi - udelat for r in range mensi a v nem dalsi for loop 
+		#kde bude krokovat motor s vetsim poctem kroku
+		#X:Y = 3:1
+		#pocet kroku Y = 200
+		#for r in range 200:
+		#	for x in range 3:
+		#		krok.X()
+		#	krok.Y()
+		SPM = movement.get_SPM()
+		ABS = movement.get_absolute_position()
+		Ax = ABS['X']
+		Ay = ABS['Y']		#position now
+		Mx = x - Ax
+		My = y - Ay			#mm to go in axis
+		SNx = Mx * SPM
+		SNy = My * SPM 		#used for motor steps - check +/-	potreba zaokrouhlit
+		DPSx = Mx / SNx
+		DPSy = My/ SNy		#distance per step for simulation
+		if SNx > SNy:
+			pomer = SNx / SNy #nebude fungovat.. je treba najit nejvetiho spolecneho delitele 
