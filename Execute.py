@@ -36,7 +36,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 	def move_to_pos(self, x, y):
 		#well move damn it
-<<<<<<< HEAD
 		#z tabule to bude funkcni jen pro simulaci
 		#motory musi krokovat u sikmo, takze treba 2x na 1y
 		#kontrolovat co je mensi - udelat for r in range mensi a v nem dalsi for loop 
@@ -59,11 +58,9 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		DPSy = My/ SNy		#distance per step for simulation
 		if SNx > SNy:
 			pomer = SNx / SNy #nebude fungovat.. je treba najit nejvetiho spolecneho delitele 
-=======
 		pass
 
 	def count_steps(self, x, y):
 		pos = movement.get_absolute_position()
 		steps_x = x - pos['X']
 		steps_y = y - pos['Y']
->>>>>>> 32c390bbf15d28ebaca9e72085532b2cc383aaca
