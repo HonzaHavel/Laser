@@ -55,10 +55,31 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		SNx = Mx * SPM
 		SNy = My * SPM 		#used for motor steps - check +/-	potreba zaokrouhlit
 		DPSx = Mx / SNx
-		DPSy = My/ SNy		#distance per step for simulation
-		if SNx > SNy:
-			pomer = SNx / SNy #nebude fungovat.. je treba najit nejvetiho spolecneho delitele 
-		pass
+		DPSy = My / SNy		#distance per step for simulation
+
+		if SNx == SNy:
+			for r in range SNx:
+				movement.reposition(DPSx, DPSy)
+
+		else:
+			sideways_error = 0
+			sideways_variable = SNx / SNy if SNy > SNx else SNy / SNx
+				if SNx > SNy:
+					for r in range SNx:
+						movement.reposition(DPSx, 0)
+						sideways_error += sideways_variable
+						if sideways_error >= 1:
+							movement.reposition(0, DPSy)
+							sideways_error -= 1
+
+				elif SNy > SNx:
+					for r in range SNy:
+						movement.reposition(0, DPSy)
+						sideways_error += sideways_variable
+						if sideways_error >= 1:
+							movement.reposition(DPSx, 0)
+							sideways_error -= 1
+			
 
 	def count_steps(self, x, y):
 		pos = movement.get_absolute_position()

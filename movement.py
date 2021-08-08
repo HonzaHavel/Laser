@@ -30,6 +30,11 @@ class movement:
 
     	self.canvasName.after(100, self.motion)
 
+    def reposition(self, x, y):
+    	self.canvasName.move(self.circle, x, y)
+    	self.canvasName.move(self.line_x, x, y)
+    	self.canvasName.move(self.line_y, x, y)
+
     def Move_lUp(self):
     	if (self.pos[0] == -5 or self.pos[1] == -5):
     		self.x = 0
