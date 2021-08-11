@@ -1,10 +1,13 @@
 #from ISO import *							#might not be needed - just for test
 							#inherit movement through canvas
 class Execute:				#will be executed by button in canvas - executin dictionary from process return
-	def __init__(self, ISO, movement):		#execute will be checking for variable changed by stop button 
-		self.Burn = False
+	def __init__(self, circle, canvasName, visual, ISO, movement):		#execute will be checking for variable changed by stop button 
+		self.visual = visual
+		self.canvasName = canvasName
+		self.Laser = False
 		self.ISO = ISO
 		self.movement = movement
+		self.circle = circle
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -19,6 +22,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 		if 'Z' in command:
 			value = command['Z']
+			print(value)
 			self.Z(value)
 			self.ISO.Add_count()
 
@@ -34,11 +38,12 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		return (self.movement.change_feedrate(feedrate))
 
 	def Z(self, state):
+		state = int(state)
 		if state == 10: #laser off
-			self.Burn = False
+			self.Laser = False
 
-		elif state == 0: #laser on
-			self.Burn = True
+		if state == 0: #laser on
+			self.Laser = True
 
 	def move_to_pos(self, x, y):
 		#well move damn it
@@ -75,16 +80,20 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 				for r in range (StepsX):
 					self.movement.reposition(DPSx, 0)
 					sideways_error += sideways_variable
+					self.burn()
 					if sideways_error >= 1:
 						self.movement.reposition(0, DPSy)
+						self.burn()
 						sideways_error -= 1
 
 			elif StepsY > StepsX:
 				for r in range (StepsY):
 					self.movement.reposition(0, DPSy)
 					sideways_error += sideways_variable
+					self.burn()
 					if sideways_error >= 1:
 						self.movement.reposition(DPSx, 0)
+						self.burn()
 						sideways_error -= 1
 			
 
@@ -92,3 +101,9 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		pos = self.movement.get_absolute_position()
 		steps_x = x - pos['X']
 		steps_y = y - pos['Y']
+
+	def burn(self):				#will turn on laser
+		if self.Laser == True:
+			self.visual.draw(self.circle, self.canvasName, "red2")
+		else:
+			pass

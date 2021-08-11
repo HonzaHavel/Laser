@@ -4,7 +4,7 @@ from movement import movement
 from Execute import *
 from ISO import *
 
-file_name = ('G-code_test.tap')
+file_name = ('G-code_test2.tap')
 
 
 Z = False
@@ -28,7 +28,7 @@ m = movement(canvas, circle, line_x, line_y)
 
 
 IS = ISO(file_name)
-EXE = Execute(IS, m)
+EXE = Execute(circle, canvas, visual, IS, m)
 
 
 """
@@ -69,7 +69,7 @@ def simulate():
 	pos = m.get_absolute_position()
 	print(pos)
 	EXE.Exe_ISO(IS.Process(IS.Input_Line()))
-	root.after(100, simulate)
+	root.after(1, simulate)
 
 def get_pos():
 	idk = m.get_coords()
@@ -78,6 +78,6 @@ def get_pos():
 	#print(type(idk))
 	root.after(20, get_pos)
 
-root.after(100, simulate)
+root.after(1, simulate)
 #root.after(20, get_pos)
 root.mainloop()
