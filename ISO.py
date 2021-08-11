@@ -27,6 +27,7 @@ class ISO:
 			elif command[0] == 'Z':
 				toReturn['Z'] = command[1:]
 		print(toReturn)
+		return toReturn
 
 
 	def Add_count(self):
@@ -38,7 +39,7 @@ class ISO:
 	def Check(self):
 		return(self.ISO_done)
 
-
+'''
 IS = ISO(file_name)
 while True:
 	x = IS.Check()
@@ -46,3 +47,4 @@ while True:
 		break
 	IS.Process(IS.Input_Line())
 	IS.Add_count()
+'''

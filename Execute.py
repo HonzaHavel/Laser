@@ -1,38 +1,44 @@
-from ISO import *			#might not be needed - just for test
+#from ISO import *							#might not be needed - just for test
 							#inherit movement through canvas
 class Execute:				#will be executed by button in canvas - executin dictionary from process return
-	def __init__(self,movement, Z):		#execute will be checking for variable changed by stop button 
-		self.Z = Z
+	def __init__(self, ISO, movement):		#execute will be checking for variable changed by stop button 
+		self.Burn = False
+		self.ISO = ISO
+		self.movement = movement
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
 			value = command['G']
-			G(value)
+			self.G(value)
+			self.ISO.Add_count()
 
 		if 'F' in command:
 			value = command['F']
-			F(value)
+			self.F(value)
+			self.ISO.Add_count()
 
 		if 'Z' in command:
 			value = command['Z']
-			Z(value)
+			self.Z(value)
+			self.ISO.Add_count()
 
 		if 'X' in command or 'Y' in command:
-			move_to_pos(float(command['X']), float(command['Y']))
+			self.move_to_pos(float(command['X']), float(command['Y']))
+			self.ISO.Add_count()
 
 	def G(self, value):
 		if value == 1:
 			print("what now? :D")
 
 	def F(self, feedrate):
-		return (movement.change_feedrate(feedrate))
+		return (self.movement.change_feedrate(feedrate))
 
 	def Z(self, state):
 		if state == 10: #laser off
-			return (self.Z = False)
+			self.Burn = False
 
 		elif state == 0: #laser on
-			return (self.Z = True)
+			self.Burn = True
 
 	def move_to_pos(self, x, y):
 		#well move damn it
@@ -46,42 +52,43 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		#	for x in range 3:
 		#		krok.X()
 		#	krok.Y()
-		SPM = movement.get_SPM()
-		ABS = movement.get_absolute_position()
+		SPM = self.movement.get_SPM()
+		ABS = self.movement.get_absolute_position()
 		Ax = ABS['X']
 		Ay = ABS['Y']		#position now
 		Mx = x - Ax
 		My = y - Ay			#mm to go in axis
-		SNx = Mx * SPM
-		SNy = My * SPM 		#used for motor steps - check +/-	potreba zaokrouhlit
-		DPSx = Mx / SNx
-		DPSy = My / SNy		#distance per step for simulation
-
+		SNx = round(Mx * SPM)
+		SNy = round(My * SPM) 		#used for motor steps - check +/-	potreba zaokrouhlit
+		DPSx = Mx / abs(SNx) if SNx is not 0 else 0
+		DPSy = My / abs(SNy) if SNy is not 0 else 0		#distance per step for simulation
+		StepsX = abs(SNx)
+		StepsY = abs(SNy)
 		if SNx == SNy:
-			for r in range SNx:
-				movement.reposition(DPSx, DPSy)
+			for r in range (SNx):
+				self.movement.reposition(DPSx, DPSy)
 
 		else:
 			sideways_error = 0
-			sideways_variable = SNx / SNy if SNy > SNx else SNy / SNx
-				if SNx > SNy:
-					for r in range SNx:
-						movement.reposition(DPSx, 0)
-						sideways_error += sideways_variable
-						if sideways_error >= 1:
-							movement.reposition(0, DPSy)
-							sideways_error -= 1
+			sideways_variable = abs(SNx) / abs(SNy) if abs(SNy) > abs(SNx) else abs(SNy) / abs(SNx)
+			if StepsX > StepsY:
+				for r in range (StepsX):
+					self.movement.reposition(DPSx, 0)
+					sideways_error += sideways_variable
+					if sideways_error >= 1:
+						self.movement.reposition(0, DPSy)
+						sideways_error -= 1
 
-				elif SNy > SNx:
-					for r in range SNy:
-						movement.reposition(0, DPSy)
-						sideways_error += sideways_variable
-						if sideways_error >= 1:
-							movement.reposition(DPSx, 0)
-							sideways_error -= 1
+			elif StepsY > StepsX:
+				for r in range (StepsY):
+					self.movement.reposition(0, DPSy)
+					sideways_error += sideways_variable
+					if sideways_error >= 1:
+						self.movement.reposition(DPSx, 0)
+						sideways_error -= 1
 			
 
 	def count_steps(self, x, y):
-		pos = movement.get_absolute_position()
+		pos = self.movement.get_absolute_position()
 		steps_x = x - pos['X']
 		steps_y = y - pos['Y']

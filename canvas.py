@@ -1,6 +1,11 @@
 from tkinter import *
 import visual
 from movement import movement
+from Execute import *
+from ISO import *
+
+file_name = ('G-code_test.tap')
+
 
 Z = False
 
@@ -20,6 +25,12 @@ line_x = visual.create_line_x(circle_pos, canvas, "gray30")
 line_y = visual.create_line_y(circle_pos, canvas, "gray30")
 circle = visual.create_circle(circle_pos, 5, canvas, "red2")
 m = movement(canvas, circle, line_x, line_y)
+
+
+IS = ISO(file_name)
+EXE = Execute(IS, m)
+
+
 """
 Button_lUp = Button (root, text = "*", padx = 40, pady = 40, command=lambda: m.Move_lUp())
 Button_left = Button (root, text = "L", padx = 40, pady = 40, command=lambda: m.move_left())
@@ -54,6 +65,12 @@ def laser_toggle():
 if Z == True:
 	root.after(20, laser_toggle)
 
+def simulate():
+	pos = m.get_absolute_position()
+	print(pos)
+	EXE.Exe_ISO(IS.Process(IS.Input_Line()))
+	root.after(100, simulate)
+
 def get_pos():
 	idk = m.get_coords()
 	pos = m.get_absolute_position()
@@ -61,5 +78,6 @@ def get_pos():
 	#print(type(idk))
 	root.after(20, get_pos)
 
-root.after(20, get_pos)
+root.after(100, simulate)
+#root.after(20, get_pos)
 root.mainloop()
