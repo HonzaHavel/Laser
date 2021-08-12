@@ -69,8 +69,10 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		DPSy = My / abs(SNy) if SNy is not 0 else 0		#distance per step for simulation
 		StepsX = abs(SNx)
 		StepsY = abs(SNy)
+		range_prev = 0
 		if SNx == SNy:
 			for r in range (SNx):
+				self.burn()
 				self.movement.reposition(DPSx, DPSy)
 
 		else:
@@ -80,20 +82,24 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 				for r in range (StepsX):
 					self.movement.reposition(DPSx, 0)
 					sideways_error += sideways_variable
-					self.burn()
+					if r - range_prev == 10:
+						self.burn()
+						range_prev = r
 					if sideways_error >= 1:
 						self.movement.reposition(0, DPSy)
-						self.burn()
+						#self.burn()
 						sideways_error -= 1
 
 			elif StepsY > StepsX:
 				for r in range (StepsY):
 					self.movement.reposition(0, DPSy)
 					sideways_error += sideways_variable
-					self.burn()
+					if r - range_prev == 10:
+						self.burn()
+						range_prev = r
 					if sideways_error >= 1:
 						self.movement.reposition(DPSx, 0)
-						self.burn()
+						#self.burn()
 						sideways_error -= 1
 			
 

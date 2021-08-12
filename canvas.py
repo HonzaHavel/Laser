@@ -31,7 +31,7 @@ IS = ISO(file_name)
 EXE = Execute(circle, canvas, visual, IS, m)
 
 
-"""
+
 Button_lUp = Button (root, text = "*", padx = 40, pady = 40, command=lambda: m.Move_lUp())
 Button_left = Button (root, text = "L", padx = 40, pady = 40, command=lambda: m.move_left())
 Button_lDown = Button (root, text = "*", padx = 40, pady = 40, command=lambda: m.Move_lDown())
@@ -51,7 +51,7 @@ Button_Down.grid(row = 2, column = 5)
 Button_rUp.grid(row = 0, column = 6)
 Button_right.grid(row = 1, column = 6)
 Button_rDown.grid(row = 2, column = 6)
-"""
+
 root.bind("<KeyPress-Left>",lambda e: m.move_left())
 root.bind("<KeyPress-Right>",lambda e: m.move_right())
 root.bind("<KeyPress-Up>",lambda e: m.move_up())
