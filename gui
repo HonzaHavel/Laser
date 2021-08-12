@@ -1,0 +1,23 @@
+seznam věcí na gui
+
+labely s pozicemi x,y,z - z je jen laser on a off nebo souřadnice 0 a 10
+
+tlačítka na ruční ovládání laseru do čtyř zádkladních směrů a šikmo - celkem 8 tlačítek + pole do kterého napíšu o kolik mm se laser posune na jeden stisk tlačítka
+
+pole pro nastavení rychlosti - feedrate
+
+tlačítko pro zapnutí a vypnutí laseru
+
+tlačítko homing
+
+tlačítko nastavení nulového bodu
+
+tlačítko návratu do nulového bodu
+
+tlačítko na hard limity - on a off
+
+tlačítko na nahrání ISO kodu
+
+tlačítka na zapnutí programu, pozastavení, znovuspuštění a ukončení
+
+jestli si chceš nějak pohrát s designem, tak klidně.. já to v Tkinteru neumím :D ale myslím, že když to bude celé v nějaké tmavější šedivé barvě s bílými ohraničeními, tak by to mělo vypadat dobře i bez nějakých extra úprav
