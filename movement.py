@@ -36,12 +36,8 @@ class movement:
     	self.canvasName.move(self.line_y, x, y)
 
     def Move_lUp(self):
-    	if (self.pos[0] == -5 or self.pos[1] == -5):
-    		self.x = 0
-    		self.y = 0
-    	else:
-    		self.x = -5
-    		self.y = -5
+    	self.x = -5
+    	self.y = -5
 
     def Move_rUp(self):
     	self.x = 5
