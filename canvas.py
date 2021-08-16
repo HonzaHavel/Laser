@@ -70,15 +70,18 @@ class Main:
 		root.after(20, get_pos)
 
 	def pos_buttons(self):
-		Button_lUp = Button (self.root, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_lUp())
-		Button_left = Button (self.root, text = "L", padx = 40, pady = 40, command=lambda: self.m.move_left())
-		Button_lDown = Button (self.root, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_lDown())
-		Button_Up = Button (self.root, text = "U", padx = 40, pady = 40, command=lambda: self.m.move_up())
-		Button_ = Button (self.root, text = "*", padx = 40, pady = 40, command=lambda: self.m.move_up())
-		Button_Down = Button (self.root, text = "D", padx = 40, pady = 40, command=lambda: self.m.move_down())
-		Button_rUp = Button (self.root, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_rUp())
-		Button_right = Button (self.root, text = "R", padx = 40, pady = 40, command=lambda: self.m.move_right())
-		Button_rDown = Button (self.root, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_rDown())
+		f = Frame(self.root, height = 300, width = 150)
+		f.grid(row = 1, column = 5, columnspan = 3, rowspan = 4)
+
+		Button_lUp = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_lUp())
+		Button_left = Button (f, text = "L", padx = 40, pady = 40, command=lambda: self.m.move_left())
+		Button_lDown = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_lDown())
+		Button_Up = Button (f, text = "U", padx = 40, pady = 40, command=lambda: self.m.move_up())
+		Button_ = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.move_up())
+		Button_Down = Button (f, text = "D", padx = 40, pady = 40, command=lambda: self.m.move_down())
+		Button_rUp = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_rUp())
+		Button_right = Button (f, text = "R", padx = 40, pady = 40, command=lambda: self.m.move_right())
+		Button_rDown = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_rDown())
 
 		Button_lUp.grid(row = 0, column = 5)
 		Button_left.grid(row = 1,column = 5)
