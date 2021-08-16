@@ -6,6 +6,8 @@ tlačítka na ruční ovládání laseru do čtyř zádkladních směrů a šikm
 
 pole pro nastavení rychlosti - feedrate
 
+pole mm/s
+
 tlačítko pro zapnutí a vypnutí laseru
 
 tlačítko homing
@@ -21,3 +23,6 @@ tlačítko na nahrání ISO kodu
 tlačítka na zapnutí programu, pozastavení, znovuspuštění a ukončení
 
 jestli si chceš nějak pohrát s designem, tak klidně.. já to v Tkinteru neumím :D ale myslím, že když to bude celé v nějaké tmavější šedivé barvě s bílými ohraničeními, tak by to mělo vypadat dobře i bez nějakých extra úprav
+
+17 button
+1 pole

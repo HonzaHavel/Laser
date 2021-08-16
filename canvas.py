@@ -12,11 +12,11 @@ class Main:
 
 		self.root = Tk()
 		self.root.resizable(width=False, height=False)
+		self.root.geometry("800x480")
+		self.width = 480
+		self.height = 480
 
-		self.width = 300
-		self.height = 300
-
-		self.circle_pos = [150, 150]
+		self.circle_pos = [240, 240]
 
 		self.visual = visual
 
@@ -29,7 +29,7 @@ class Main:
 		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y)
 
 		self.pos_buttons()
-		self.pos_labels()
+		#self.pos_labels()
 
 		self.IS = ISO(self.file_name)
 		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m)
@@ -40,7 +40,7 @@ class Main:
 		self.root.bind("<KeyPress-Down>",lambda e: self.m.move_down())
 		self.root.bind("<KeyRelease>", lambda e: self.m.Stop())
 
-		#self.root.after(1, self.simulate)
+		self.root.after(1, self.loop)
 		#root.after(20, get_pos)
 		self.root.mainloop()
 		'''
@@ -51,11 +51,16 @@ class Main:
 		if Z == True:
 			root.after(20, laser_toggle)
 		'''
+
+	def loop(self):
+		self.update_pos_labels()
+		self.simulate()
+		self.root.after(1, self.loop)
+
 	def simulate(self):
 		pos = self.m.get_absolute_position()
 		print(pos)
 		self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
-		self.root.after(1, self.simulate)
 
 	def get_pos(self):
 		idk = m.get_coords()
@@ -86,12 +91,21 @@ class Main:
 		Button_rDown.grid(row = 2, column = 7)
 
 	def pos_labels(self):
-		Label_X = Label(self.root, text = "X:", padx = 40, pady = 40)
-		Label_Y = Label(self.root, text = "Y:", padx = 40, pady = 40)
-		Label_Z = Label(self.root, text = "Z:", padx = 40, pady = 40)
+		self.Label_X = Label(self.root, text = "X:", padx = 40, pady = 40)
+		self.Label_Y = Label(self.root, text = "Y:", padx = 40, pady = 40)
+		self.Label_Z = Label(self.root, text = "Z:", padx = 40, pady = 40)
 
-		Label_X.grid(row = 0, column = 0)
-		Label_Y.grid(row = 1, column = 0)
-		Label_Z.grid(row = 2, column = 0)
+		self.Label_X.grid(row = 0, column = 0)
+		self.Label_Y.grid(row = 1, column = 0)
+		self.Label_Z.grid(row = 2, column = 0)
+
+	def update_pos_labels(self):
+		pos = self.m.get_absolute_position()
+		pos['X'] = round(pos['X'],3)
+		pos['Y'] = round(pos['Y'],3)
+		Z = self.EXE.get_Z()
+		self.Label_X.configure(text = "X: {}".format(pos['X']))
+		self.Label_Y.configure(text = "Y: {}".format(pos['Y']))
+		self.Label_Z.configure(text = "Z: {}".format(Z))
 
 app = Main()

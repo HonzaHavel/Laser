@@ -8,6 +8,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.ISO = ISO
 		self.movement = movement
 		self.circle = circle
+		self.state = 0
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -38,11 +39,11 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		return (self.movement.change_feedrate(feedrate))
 
 	def Z(self, state):
-		state = int(state)
-		if state == 10: #laser off
+		self.state = int(state)
+		if self.state == 10: #laser off
 			self.Laser = False
 
-		if state == 0: #laser on
+		if self.state == 0: #laser on
 			self.Laser = True
 
 	def move_to_pos(self, x, y):
@@ -113,3 +114,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			self.visual.draw(self.circle, self.canvasName, "red2")
 		else:
 			pass
+
+	def get_Z(self):
+		return(self.state)
