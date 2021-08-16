@@ -17,11 +17,11 @@ class movement:
     	pos = self.get_coords()
     	if (self.last_move == 1 and pos[1] < 0):
     		self.Stop()
-    	if (self.last_move == 2 and pos[3] > 300):
+    	if (self.last_move == 2 and pos[3] > 480):
     		self.Stop()
     	if (self.last_move == 3 and pos[0] < 0):
     		self.Stop()
-    	if (self.last_move == 4 and pos[2] > 300):
+    	if (self.last_move == 4 and pos[2] > 480):
     		self.Stop()
     	
     	self.canvasName.move(self.circle, self.x, self.y)
@@ -63,7 +63,7 @@ class movement:
 
     def move_down(self):
     	pos = self.get_coords()
-    	if (pos[3] > 300):
+    	if (pos[3] > 480):
     		self.x = 0
     		self.y = 0
     	else:
@@ -83,7 +83,7 @@ class movement:
 
     def move_right(self):
     	pos = self.get_coords()
-    	if (pos[2] > 300):
+    	if (pos[2] > 480):
     		self.x = 0
     		self.y = 0
     	else:

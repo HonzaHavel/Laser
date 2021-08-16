@@ -21,14 +21,15 @@ class Main:
 		self.visual = visual
 
 		self.canvas = Canvas(self.root, width = self.width, height = self.height)
-		self.canvas.grid(row=0, rowspan=3, column=1, columnspan=3)
+		self.canvas.place(x=0, y=0)
+		#self.canvas.pack()#grid(row=0, rowspan=3, column=1, columnspan=3)
 
 		self.line_x = visual.create_line_x(self.circle_pos, self.canvas, "gray30")
 		self.line_y = visual.create_line_y(self.circle_pos, self.canvas, "gray30")
 		self.circle = visual.create_circle(self.circle_pos, 5, self.canvas, "red2")
 		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y)
 
-		self.pos_buttons()
+		self.control_frame()
 		#self.pos_labels()
 
 		self.IS = ISO(self.file_name)
@@ -69,46 +70,62 @@ class Main:
 		#print(type(idk))
 		root.after(20, get_pos)
 
-	def pos_buttons(self):
-		f = Frame(self.root, height = 300, width = 150)
-		f.grid(row = 1, column = 5, columnspan = 3, rowspan = 4)
+	def control_frame(self):
+		self.f_control = Frame(self.root, height = 480, width = 320, borderwidth = 1, highlightbackground="red",highlightthickness=1)
+		self.f_control.place(x=480, y=0)
 
-		Button_lUp = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_lUp())
-		Button_left = Button (f, text = "L", padx = 40, pady = 40, command=lambda: self.m.move_left())
-		Button_lDown = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_lDown())
-		Button_Up = Button (f, text = "U", padx = 40, pady = 40, command=lambda: self.m.move_up())
-		Button_ = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.move_up())
-		Button_Down = Button (f, text = "D", padx = 40, pady = 40, command=lambda: self.m.move_down())
-		Button_rUp = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_rUp())
-		Button_right = Button (f, text = "R", padx = 40, pady = 40, command=lambda: self.m.move_right())
-		Button_rDown = Button (f, text = "*", padx = 40, pady = 40, command=lambda: self.m.Move_rDown())
+		Label_X = Label(self.f_control, text = "X:", relief = "groove")
+		Label_Y = Label(self.f_control, text = "Y:", relief = "groove")
+		Label_Z = Label(self.f_control, text = "Z:", relief = "groove")
 
-		Button_lUp.grid(row = 0, column = 5)
-		Button_left.grid(row = 1,column = 5)
-		Button_lDown.grid(row = 2, column = 5)
-		Button_Up.grid(row = 0, column = 6)
-		Button_.grid(row = 1, column = 6)
-		Button_Down.grid(row = 2, column = 6)
-		Button_rUp.grid(row = 0, column = 7)
-		Button_right.grid(row = 1, column = 7)
-		Button_rDown.grid(row = 2, column = 7)
+		self.Label_X = Label(self.f_control, text = " ", relief = "groove")
+		self.Label_Y = Label(self.f_control, text = " ", relief = "groove")
+		self.Label_Z = Label(self.f_control, text = " ", relief = "groove")
 
-	def pos_labels(self):
-		self.Label_X = Label(self.root, text = "X:", padx = 40, pady = 40)
-		self.Label_Y = Label(self.root, text = "Y:", padx = 40, pady = 40)
-		self.Label_Z = Label(self.root, text = "Z:", padx = 40, pady = 40)
+		Label_X.place(x = 10, y = 10, height = 48, width = 30)
+		Label_Y.place(x = 10, y = 58, height = 48, width = 30)
+		Label_Z.place(x = 10, y = 106, height = 48, width = 30)
 
-		self.Label_X.grid(row = 0, column = 0)
-		self.Label_Y.grid(row = 1, column = 0)
-		self.Label_Z.grid(row = 2, column = 0)
+		self.Label_X.place(x = 40, y = 10, height = 48, width = 100)
+		self.Label_Y.place(x = 40, y = 58, height = 48, width = 100)
+		self.Label_Z.place(x = 40, y = 106, height = 48, width = 100)
+
+		Button_back = Button(self.f_control, text = "back")
+		Button_home = Button(self.f_control, text = "home")
+		Button_laser = Button(self.f_control, text = "laser")
+
+		Button_back.place(x = 158, y = 10, height = 40, width = 150)
+		Button_home.place(x = 158, y = 62, height = 40, width = 150)
+		Button_laser.place(x = 158, y = 114, height = 40, width = 150)
+		
+		Button_lUp = Button (self.f_control, text = "*", command=lambda: self.m.Move_lUp())
+		Button_left = Button (self.f_control, text = "L", command=lambda: self.m.move_left())
+		Button_lDown = Button (self.f_control, text = "*", command=lambda: self.m.Move_lDown())
+		Button_Up = Button (self.f_control, text = "U", command=lambda: self.m.move_up())
+		Button_0 = Button (self.f_control, text = "0,0", command=lambda: self.m.move_up())
+		Button_Down = Button (self.f_control, text = "D", command=lambda: self.m.move_down())
+		Button_rUp = Button (self.f_control, text = "*", command=lambda: self.m.Move_rUp())
+		Button_right = Button (self.f_control, text = "R", command=lambda: self.m.move_right())
+		Button_rDown = Button (self.f_control, text = "*", command=lambda: self.m.Move_rDown())
+
+		Button_lUp.place(x = 8, y = 170, height = 100, width = 100)
+		Button_left.place(x = 8, y = 270, height = 100, width = 100)
+		Button_lDown.place(x = 8, y = 370, height = 100, width = 100)
+		Button_Up.place(x = 108, y = 170, height = 100, width = 100)
+		Button_0.place(x = 108, y = 270, height = 100, width = 100)
+		Button_Down.place(x = 108, y = 370, height = 100, width = 100)
+		Button_rUp.place(x = 208, y = 170, height = 100, width = 100)
+		Button_right.place(x = 208, y = 270, height = 100, width = 100)
+		Button_rDown.place(x = 208, y = 370, height = 100, width = 100)
+		
 
 	def update_pos_labels(self):
 		pos = self.m.get_absolute_position()
 		pos['X'] = round(pos['X'],3)
 		pos['Y'] = round(pos['Y'],3)
 		Z = self.EXE.get_Z()
-		self.Label_X.configure(text = "X: {}".format(pos['X']))
-		self.Label_Y.configure(text = "Y: {}".format(pos['Y']))
-		self.Label_Z.configure(text = "Z: {}".format(Z))
+		self.Label_X.configure(text = "{}".format(pos['X']))
+		self.Label_Y.configure(text = "{}".format(pos['Y']))
+		self.Label_Z.configure(text = "{}".format(Z))
 
 app = Main()
