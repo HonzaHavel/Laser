@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import visual
 from movement import movement
 from Execute import *
@@ -30,6 +31,8 @@ class Main:
 		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y)
 
 		self.control_frame()
+		self.main_frame()
+		self.f_main.tkraise()
 		#self.pos_labels()
 
 		self.IS = ISO(self.file_name)
@@ -90,9 +93,9 @@ class Main:
 		self.Label_Y.place(x = 40, y = 58, height = 48, width = 100)
 		self.Label_Z.place(x = 40, y = 106, height = 48, width = 100)
 
-		Button_back = Button(self.f_control, text = "back")
-		Button_home = Button(self.f_control, text = "home")
-		Button_laser = Button(self.f_control, text = "laser")
+		Button_back = Button(self.f_control, text = "BACK")
+		Button_home = Button(self.f_control, text = "HOME")
+		Button_laser = Button(self.f_control, text = "LASER")
 
 		Button_back.place(x = 158, y = 10, height = 40, width = 150)
 		Button_home.place(x = 158, y = 62, height = 40, width = 150)
@@ -118,6 +121,51 @@ class Main:
 		Button_right.place(x = 208, y = 270, height = 100, width = 100)
 		Button_rDown.place(x = 208, y = 370, height = 100, width = 100)
 		
+	def main_frame(self):
+		self.f_main = Frame(self.root, height = 480, width = 320, borderwidth = 1, highlightbackground="red",highlightthickness=1)
+		self.f_main.place(x=480, y=0)
+
+		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE")
+		Button_upload.place(x = 10, y = 10, height = 48, width = 100)
+
+		Button_start = Button(self.f_main, text = "S")
+		Button_pause = Button(self.f_main, text = "P")
+		Button_unpause = Button(self.f_main, text = "U")
+		Button_stop = Button(self.f_main, text = "ST")
+
+		Button_start.place(x = 150, y = 10, height = 48, width = 40)
+		Button_pause.place(x = 190, y = 10, height = 48, width = 40)
+		Button_unpause.place(x = 230, y = 10, height = 48, width = 40)
+		Button_stop.place(x = 270, y = 10, height = 48, width = 40)
+
+		Label_F = Label(self.f_main, text = "FEEDRATE", relief = "groove")
+		Label_MM = Label(self.f_main, text = "STEP/MM", relief = "groove")
+		eF = Entry(self.f_main, relief = "groove")
+		eMM = Entry(self.f_main, relief = "groove")
+		Button_save = Button(self.f_main, text = "SAVE", relief = "groove")
+
+		Label_F.place(x = 10, y = 68, height = 40, width = 60)
+		Label_MM.place(x = 10, y = 106, height = 40, width = 60)
+		eF.place(x = 70, y = 67, height = 40, width = 60)
+		eMM.place(x = 70, y = 106, height = 40, width = 60)
+		Button_save.place(x = 10, y = 146, height = 40, width = 120)
+
+		Label_X = Label(self.f_main, text = "X:", relief = "groove")
+		Label_Y = Label(self.f_main, text = "Y:", relief = "groove")
+		Label_Z = Label(self.f_main, text = "Z:", relief = "groove")
+
+		Label_X.place(x = 10, y = 326, height = 48, width = 30)
+		Label_Y.place(x = 10, y = 374, height = 48, width = 30)
+		Label_Z.place(x = 10, y = 422, height = 48, width = 30)
+
+		self.Label_X = Label(self.f_main, text = " ", relief = "groove")
+		self.Label_Y = Label(self.f_main, text = " ", relief = "groove")
+		self.Label_Z = Label(self.f_main, text = " ", relief = "groove")
+
+		self.Label_X.place(x = 40, y = 326, height = 48, width = 100)
+		self.Label_Y.place(x = 40, y = 374, height = 48, width = 100)
+		self.Label_Z.place(x = 40, y = 422, height = 48, width = 100)
+
 
 	def update_pos_labels(self):
 		pos = self.m.get_absolute_position()
