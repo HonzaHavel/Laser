@@ -126,17 +126,17 @@ class Main:
 		self.f_main.place(x=480, y=0)
 
 		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE")
-		Button_upload.place(x = 10, y = 10, height = 48, width = 100)
+		Button_upload.place(x = 10, y = 10, height = 60, width = 300)
 
 		Button_start = Button(self.f_main, text = "S")
 		Button_pause = Button(self.f_main, text = "P")
 		Button_unpause = Button(self.f_main, text = "U")
 		Button_stop = Button(self.f_main, text = "ST")
 
-		Button_start.place(x = 150, y = 10, height = 48, width = 40)
-		Button_pause.place(x = 190, y = 10, height = 48, width = 40)
-		Button_unpause.place(x = 230, y = 10, height = 48, width = 40)
-		Button_stop.place(x = 270, y = 10, height = 48, width = 40)
+		Button_start.place(x = 10, y = 70, height = 48, width = 75)
+		Button_pause.place(x = 85, y = 70, height = 48, width = 75)
+		Button_unpause.place(x = 160, y = 70, height = 48, width = 75)
+		Button_stop.place(x = 235, y = 70, height = 48, width = 75)
 
 		Label_F = Label(self.f_main, text = "FEEDRATE", relief = "groove")
 		Label_MM = Label(self.f_main, text = "STEP/MM", relief = "groove")
@@ -144,11 +144,11 @@ class Main:
 		eMM = Entry(self.f_main, relief = "groove")
 		Button_save = Button(self.f_main, text = "SAVE", relief = "groove")
 
-		Label_F.place(x = 10, y = 68, height = 40, width = 60)
-		Label_MM.place(x = 10, y = 106, height = 40, width = 60)
-		eF.place(x = 70, y = 67, height = 40, width = 60)
-		eMM.place(x = 70, y = 106, height = 40, width = 60)
-		Button_save.place(x = 10, y = 146, height = 40, width = 120)
+		Label_F.place(x = 10, y = 128, height = 40, width = 60)
+		Label_MM.place(x = 10, y = 166, height = 40, width = 60)
+		eF.place(x = 70, y = 127, height = 40, width = 60)
+		eMM.place(x = 70, y = 166, height = 40, width = 60)
+		Button_save.place(x = 10, y = 276, height = 60, width = 130)
 
 		Label_X = Label(self.f_main, text = "X:", relief = "groove")
 		Label_Y = Label(self.f_main, text = "Y:", relief = "groove")
