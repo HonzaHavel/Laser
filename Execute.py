@@ -1,5 +1,5 @@
 #from ISO import *							#might not be needed - just for test
-							#inherit movement through canvas
+import time							#inherit movement through canvas
 class Execute:				#will be executed by button in canvas - executin dictionary from process return
 	def __init__(self, circle, canvasName, visual, ISO, movement):		#execute will be checking for variable changed by stop button 
 		self.visual = visual
@@ -71,10 +71,23 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		StepsX = abs(SNx)
 		StepsY = abs(SNy)
 		range_prev = 0
+		delay = self.movement.get_step_delay()
+		
 		if SNx == SNy:
+			timing = 0
+			prevTime = 0
 			for r in range (SNx):
-				self.burn()
-				self.movement.reposition(DPSx, DPSy)
+				run = False
+				timeNow = time.time()
+				timing = timeNow - prevTime
+				while run is not True:
+					if timing >= delay:
+						self.burn()
+						self.movement.reposition(DPSx, DPSy)
+						prevTime = timeNow
+						run = True
+					else:
+						pass
 
 		else:
 			sideways_error = 0

@@ -142,7 +142,7 @@ class Main:
 		Label_MM = Label(self.f_main, text = "STEP/MM", relief = "groove")
 		eF = Entry(self.f_main, relief = "groove")
 		eMM = Entry(self.f_main, relief = "groove")
-		Button_save = Button(self.f_main, text = "SAVE", relief = "groove")
+		Button_save = Button(self.f_main, text = "SAVE", relief = "groove", command:lambda:self.save())
 
 		Label_F.place(x = 10, y = 128, height = 40, width = 60)
 		Label_MM.place(x = 10, y = 166, height = 40, width = 60)
@@ -216,7 +216,7 @@ class Main:
 
 	def close_numeric_keyboard(self):
 		pass
-		
+
 	def Enter(self, number):
 		#enter into entery
 		if self.entry_widget == 0
@@ -224,5 +224,13 @@ class Main:
 
 		elif self.entry_widget == 1
 			eMM.insert(END, number)
+
+	def save(self):
+		feedrate = eF.get()
+		stepPerMM = eMM.get()
+		self.m.change_feedrate(int(feedrate))
+		self.m.change_SPM(int(stepPerMM))
+
+		#add function to change variables in database and remember it
 
 app = Main()

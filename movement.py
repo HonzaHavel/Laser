@@ -121,3 +121,15 @@ class movement:
     	
     def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
     	self.F = feedrate
+
+    def get_feedrate(self):
+        return self.F
+
+    #calculate mm per minute (feedrate) time for Execute.py
+    def get_step_delay(self):
+        F = self.get_feedrate()
+        SPM = self.get_SPM()
+        SPMin = F * SPM
+        delay = 60 / SPMin
+        return delay
+
