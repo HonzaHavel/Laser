@@ -150,6 +150,9 @@ class Main:
 		eMM.place(x = 70, y = 166, height = 40, width = 60)
 		Button_save.place(x = 10, y = 276, height = 60, width = 130)
 
+		eF.bind("<1>", open_numeric_keyboard(0))	#open numeric for feedrate
+		eMM.bind("<1>", open_numeric_keyboard(1))	#open numeric for MM
+
 		Label_X = Label(self.f_main, text = "X:", relief = "groove")
 		Label_Y = Label(self.f_main, text = "Y:", relief = "groove")
 		Label_Z = Label(self.f_main, text = "Z:", relief = "groove")
@@ -170,16 +173,16 @@ class Main:
 		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1, highlightbackground="red",highlightthickness=1)
 		self.f_numeric.place(x=560, y=300)
 
-		Button_0 = Button(self.f_numeric, text = "0")
-		Button_1 = Button(self.f_numeric, text = "1")
-		Button_2 = Button(self.f_numeric, text = "2")
-		Button_3 = Button(self.f_numeric, text = "3")
-		Button_4 = Button(self.f_numeric, text = "4")
-		Button_5 = Button(self.f_numeric, text = "5")
-		Button_6 = Button(self.f_numeric, text = "6")
-		Button_7 = Button(self.f_numeric, text = "7")
-		Button_8 = Button(self.f_numeric, text = "8")
-		Button_9 = Button(self.f_numeric, text = "9")
+		Button_0 = Button(self.f_numeric, text = "0", command:lambda:self.Enter(0))
+		Button_1 = Button(self.f_numeric, text = "1", command:lambda:self.Enter(1))
+		Button_2 = Button(self.f_numeric, text = "2", command:lambda:self.Enter(2))
+		Button_3 = Button(self.f_numeric, text = "3", command:lambda:self.Enter(3))
+		Button_4 = Button(self.f_numeric, text = "4", command:lambda:self.Enter(4))
+		Button_5 = Button(self.f_numeric, text = "5", command:lambda:self.Enter(5))
+		Button_6 = Button(self.f_numeric, text = "6", command:lambda:self.Enter(6))
+		Button_7 = Button(self.f_numeric, text = "7", command:lambda:self.Enter(7))
+		Button_8 = Button(self.f_numeric, text = "8", command:lambda:self.Enter(8))
+		Button_9 = Button(self.f_numeric, text = "9", command:lambda:self.Enter(9))
 
 		Button_0.place(x = 60, y = 180, height = 60, width = 60)
 		Button_1.place(x = 0, y = 0, height = 60, width = 60)
@@ -201,5 +204,25 @@ class Main:
 		self.Label_X.configure(text = "{}".format(pos['X']))
 		self.Label_Y.configure(text = "{}".format(pos['Y']))
 		self.Label_Z.configure(text = "{}".format(Z))
+
+	def open_numeric_keyboard(self, entry):
+		#entry = chceck what entry is opened to write to the right one
+		self.numeric_frame.tkraise()
+		if entry == 0:		#F
+			self.entry_widget = 0
+
+		elif entry == 1:	#MM
+			self.entry_widget = 1
+
+	def close_numeric_keyboard(self):
+		pass
+		
+	def Enter(self, number):
+		#enter into entery
+		if self.entry_widget == 0
+			eF.insert(END, number)
+
+		elif self.entry_widget == 1
+			eMM.insert(END, number)
 
 app = Main()
