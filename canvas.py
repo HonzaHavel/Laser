@@ -166,6 +166,32 @@ class Main:
 		self.Label_Y.place(x = 40, y = 374, height = 48, width = 100)
 		self.Label_Z.place(x = 40, y = 422, height = 48, width = 100)
 
+	def numeric_frame(self):
+		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1, highlightbackground="red",highlightthickness=1)
+		self.f_numeric.place(x=560, y=300)
+
+		Button_0 = Button(self.f_numeric, text = "0")
+		Button_1 = Button(self.f_numeric, text = "1")
+		Button_2 = Button(self.f_numeric, text = "2")
+		Button_3 = Button(self.f_numeric, text = "3")
+		Button_4 = Button(self.f_numeric, text = "4")
+		Button_5 = Button(self.f_numeric, text = "5")
+		Button_6 = Button(self.f_numeric, text = "6")
+		Button_7 = Button(self.f_numeric, text = "7")
+		Button_8 = Button(self.f_numeric, text = "8")
+		Button_9 = Button(self.f_numeric, text = "9")
+
+		Button_0.place(x = 60, y = 180, height = 60, width = 60)
+		Button_1.place(x = 0, y = 0, height = 60, width = 60)
+		Button_2.place(x = 60, y = 0, height = 60, width = 60)
+		Button_3.place(x = 120, y = 0, height = 60, width = 60)
+		Button_4.place(x = 0, y = 60, height = 60, width = 60)
+		Button_5.place(x = 60, y = 60, height = 60, width = 60)
+		Button_6.place(x = 120, y = 60, height = 60, width = 60)
+		Button_7.place(x = 0, y = 120, height = 60, width = 60)
+		Button_8.place(x = 60, y = 120, height = 60, width = 60)
+		Button_9.place(x = 120, y = 120, height = 60, width = 60)
+
 
 	def update_pos_labels(self):
 		pos = self.m.get_absolute_position()
