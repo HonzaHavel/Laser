@@ -7,6 +7,7 @@ from ISO import *
 
 class Main:
 	def __init__(self):
+		self.entry_widget = 0
 		self.file_name = ('G-code_test.tap')
 
 		self.Z = False
@@ -32,6 +33,7 @@ class Main:
 
 		self.control_frame()
 		self.main_frame()
+		self.numeric_frame()
 		self.f_main.tkraise()
 		#self.pos_labels()
 
@@ -63,13 +65,13 @@ class Main:
 
 	def simulate(self):
 		pos = self.m.get_absolute_position()
-		print(pos)
+		#print(pos)
 		self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
 
 	def get_pos(self):
 		idk = m.get_coords()
 		pos = m.get_absolute_position()
-		print(pos)
+		#print(pos)
 		#print(type(idk))
 		root.after(20, get_pos)
 
@@ -120,7 +122,8 @@ class Main:
 		Button_rUp.place(x = 208, y = 170, height = 100, width = 100)
 		Button_right.place(x = 208, y = 270, height = 100, width = 100)
 		Button_rDown.place(x = 208, y = 370, height = 100, width = 100)
-		
+
+
 	def main_frame(self):
 		self.f_main = Frame(self.root, height = 480, width = 320, borderwidth = 1, highlightbackground="red",highlightthickness=1)
 		self.f_main.place(x=480, y=0)
@@ -140,18 +143,20 @@ class Main:
 
 		Label_F = Label(self.f_main, text = "FEEDRATE", relief = "groove")
 		Label_MM = Label(self.f_main, text = "STEP/MM", relief = "groove")
-		eF = Entry(self.f_main, relief = "groove")
-		eMM = Entry(self.f_main, relief = "groove")
-		Button_save = Button(self.f_main, text = "SAVE", relief = "groove", command:lambda:self.save())
+		self.eF = Entry(self.f_main, relief = "groove")
+		self.eMM = Entry(self.f_main, relief = "groove")
+		Button_save = Button(self.f_main, text = "SAVE", relief = "groove", command = lambda:self.save())
 
 		Label_F.place(x = 10, y = 128, height = 40, width = 60)
 		Label_MM.place(x = 10, y = 166, height = 40, width = 60)
-		eF.place(x = 70, y = 127, height = 40, width = 60)
-		eMM.place(x = 70, y = 166, height = 40, width = 60)
+		self.eF.place(x = 70, y = 127, height = 40, width = 60)
+		self.eMM.place(x = 70, y = 166, height = 40, width = 60)
 		Button_save.place(x = 10, y = 276, height = 60, width = 130)
 
-		eF.bind("<1>", open_numeric_keyboard(0))	#open numeric for feedrate
-		eMM.bind("<1>", open_numeric_keyboard(1))	#open numeric for MM
+		open = lambda x: open_numeric_keyboard(x)
+
+		self.eF.bind("<1>", lambda x:self.open_numeric_keyboard(0))	#open numeric for feedrate
+		self.eMM.bind("<1>", lambda x:self.open_numeric_keyboard(1))	#open numeric for MM
 
 		Label_X = Label(self.f_main, text = "X:", relief = "groove")
 		Label_Y = Label(self.f_main, text = "Y:", relief = "groove")
@@ -173,16 +178,16 @@ class Main:
 		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1, highlightbackground="red",highlightthickness=1)
 		self.f_numeric.place(x=560, y=300)
 
-		Button_0 = Button(self.f_numeric, text = "0", command:lambda:self.Enter(0))
-		Button_1 = Button(self.f_numeric, text = "1", command:lambda:self.Enter(1))
-		Button_2 = Button(self.f_numeric, text = "2", command:lambda:self.Enter(2))
-		Button_3 = Button(self.f_numeric, text = "3", command:lambda:self.Enter(3))
-		Button_4 = Button(self.f_numeric, text = "4", command:lambda:self.Enter(4))
-		Button_5 = Button(self.f_numeric, text = "5", command:lambda:self.Enter(5))
-		Button_6 = Button(self.f_numeric, text = "6", command:lambda:self.Enter(6))
-		Button_7 = Button(self.f_numeric, text = "7", command:lambda:self.Enter(7))
-		Button_8 = Button(self.f_numeric, text = "8", command:lambda:self.Enter(8))
-		Button_9 = Button(self.f_numeric, text = "9", command:lambda:self.Enter(9))
+		Button_0 = Button(self.f_numeric, text = "0", command = lambda:self.Enter(0))
+		Button_1 = Button(self.f_numeric, text = "1", command = lambda:self.Enter(1))
+		Button_2 = Button(self.f_numeric, text = "2", command = lambda:self.Enter(2))
+		Button_3 = Button(self.f_numeric, text = "3", command = lambda:self.Enter(3))
+		Button_4 = Button(self.f_numeric, text = "4", command = lambda:self.Enter(4))
+		Button_5 = Button(self.f_numeric, text = "5", command = lambda:self.Enter(5))
+		Button_6 = Button(self.f_numeric, text = "6", command = lambda:self.Enter(6))
+		Button_7 = Button(self.f_numeric, text = "7", command = lambda:self.Enter(7))
+		Button_8 = Button(self.f_numeric, text = "8", command = lambda:self.Enter(8))
+		Button_9 = Button(self.f_numeric, text = "9", command = lambda:self.Enter(9))
 
 		Button_0.place(x = 60, y = 180, height = 60, width = 60)
 		Button_1.place(x = 0, y = 0, height = 60, width = 60)
@@ -205,29 +210,31 @@ class Main:
 		self.Label_Y.configure(text = "{}".format(pos['Y']))
 		self.Label_Z.configure(text = "{}".format(Z))
 
+
 	def open_numeric_keyboard(self, entry):
 		#entry = chceck what entry is opened to write to the right one
-		self.numeric_frame.tkraise()
 		if entry == 0:		#F
 			self.entry_widget = 0
 
 		elif entry == 1:	#MM
 			self.entry_widget = 1
+		self.f_numeric.tkraise()
+
 
 	def close_numeric_keyboard(self):
 		pass
 
 	def Enter(self, number):
 		#enter into entery
-		if self.entry_widget == 0
-			eF.insert(END, number)
+		if self.entry_widget == 0:
+			self.eF.insert(END, number)
 
-		elif self.entry_widget == 1
-			eMM.insert(END, number)
+		elif self.entry_widget == 1:
+			self.eMM.insert(END, number)
 
 	def save(self):
-		feedrate = eF.get()
-		stepPerMM = eMM.get()
+		feedrate = self.eF.get()
+		stepPerMM = self.eMM.get()
 		self.m.change_feedrate(int(feedrate))
 		self.m.change_SPM(int(stepPerMM))
 
