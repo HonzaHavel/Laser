@@ -47,17 +47,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			self.Laser = True
 
 	def move_to_pos(self, x, y):
-		#well move damn it
-		#z tabule to bude funkcni jen pro simulaci
-		#motory musi krokovat u sikmo, takze treba 2x na 1y
-		#kontrolovat co je mensi - udelat for r in range mensi a v nem dalsi for loop 
-		#kde bude krokovat motor s vetsim poctem kroku
-		#X:Y = 3:1
-		#pocet kroku Y = 200
-		#for r in range 200:
-		#	for x in range 3:
-		#		krok.X()
-		#	krok.Y()
 		SPM = self.movement.get_SPM()
 		ABS = self.movement.get_absolute_position()
 		Ax = ABS['X']
