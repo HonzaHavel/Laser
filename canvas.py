@@ -4,6 +4,7 @@ import visual
 from movement import movement
 from Execute import *
 from ISO import *
+import json
 
 class Main:
 	def __init__(self):
@@ -39,7 +40,7 @@ class Main:
 
 		self.IS = ISO(self.file_name)
 		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m)
-
+		self.json = json
 		self.root.bind("<KeyPress-Left>",lambda e: self.m.move_left())
 		self.root.bind("<KeyPress-Right>",lambda e: self.m.move_right())
 		self.root.bind("<KeyPress-Up>",lambda e: self.m.move_up())
@@ -60,13 +61,14 @@ class Main:
 
 	def loop(self):
 		self.update_pos_labels()
+		self.writeBD(1,1)
 		self.simulate()
 		self.root.after(1, self.loop)
 
 	def simulate(self):
 		pos = self.m.get_absolute_position()
 		#print(pos)
-		self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
+		#self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
 
 	def get_pos(self):
 		idk = m.get_coords()
@@ -175,7 +177,7 @@ class Main:
 		self.Label_Z.place(x = 40, y = 422, height = 48, width = 100)
 
 	def numeric_frame(self):
-		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1, highlightbackground="red",highlightthickness=1)
+		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1,highlightthickness=1)
 		self.f_numeric.place(x=560, y=300)
 
 		Button_0 = Button(self.f_numeric, text = "0", command = lambda:self.Enter(0))
@@ -235,9 +237,23 @@ class Main:
 	def save(self):
 		feedrate = self.eF.get()
 		stepPerMM = self.eMM.get()
-		self.m.change_feedrate(int(feedrate))
-		self.m.change_SPM(int(stepPerMM))
+		self.writeBD(feedrate, stepPerMM)
+		self.readDB
 
 		#add function to change variables in database and remember it
+
+	def writeBD(self, feedRate, StepPerMM):
+		data = {}
+
+		data["feedrate"] = feedRate
+		data["stepsPerMM"] = StepPerMM
+		
+		with open("laserDB.json", "w") as outfile:
+			self.json.dump(data, outfile)
+
+	def readDB(self):
+		with open('data.txt') as json_file:
+   			data = json.load(json_file)
+   			print (data)
 
 app = Main()
