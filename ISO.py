@@ -26,7 +26,7 @@ class ISO:
 				toReturn['Y'] = command[1:]
 			elif command[0] == 'Z':
 				toReturn['Z'] = command[1:]
-		print(toReturn)
+		#print(toReturn)
 		return toReturn
 
 

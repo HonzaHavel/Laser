@@ -11,7 +11,7 @@ class movement:
     	self.line_y = line_y
     	self.last_move = 0
     	self.motion()		#calling move class to move objects
-    	print(self.get_coords())
+    	#print(self.get_coords())
 
     def motion(self):
     	pos = self.get_coords()
@@ -103,7 +103,7 @@ class movement:
     	if (pos[0] < 0.0 and self.x != 0):
     		self.x = 0
     		self.y = 0
-    		print ("1")
+    		#print ("1")
     	else:
     		pass
 
@@ -130,6 +130,6 @@ class movement:
         F = self.get_feedrate()
         SPM = self.get_SPM()
         SPMin = F * SPM
-        delay = 60 / SPMin
+        delay = 60 / int(SPMin)
         return delay
 

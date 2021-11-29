@@ -119,3 +119,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 	def get_Z(self):
 		return(self.state)
+
+	def idk(self):
+		pass
