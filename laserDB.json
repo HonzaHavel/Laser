@@ -1,1 +1,1 @@
-{"feedrate": 1, "stepsPerMM": 1}
+{"_default": {"1": {"FeedRate": "5"}, "2": {"StepsPerMM": "1"}}}

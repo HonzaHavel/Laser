@@ -4,7 +4,7 @@ import visual
 from movement import movement
 from Execute import *
 from ISO import *
-import json
+from tinydb import TinyDB, Query
 
 class Main:
 	def __init__(self):
@@ -38,9 +38,11 @@ class Main:
 		self.f_main.tkraise()
 		#self.pos_labels()
 
+		self.LaserQuery = Query()
+		self.db = TinyDB("C:/Users/U55816/Documents/git/Laser/laserDB.json")
+
 		self.IS = ISO(self.file_name)
 		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m)
-		self.json = json
 		self.root.bind("<KeyPress-Left>",lambda e: self.m.move_left())
 		self.root.bind("<KeyPress-Right>",lambda e: self.m.move_right())
 		self.root.bind("<KeyPress-Up>",lambda e: self.m.move_up())
@@ -61,7 +63,7 @@ class Main:
 
 	def loop(self):
 		self.update_pos_labels()
-		self.writeBD(1,1)
+		#self.writeBD(1,1)
 		self.simulate()
 		self.root.after(1, self.loop)
 
@@ -237,19 +239,22 @@ class Main:
 	def save(self):
 		feedrate = self.eF.get()
 		stepPerMM = self.eMM.get()
-		self.writeBD(feedrate, stepPerMM)
-		self.readDB
+		self.writeDB(feedrate, stepPerMM)
 
 		#add function to change variables in database and remember it
 
-	def writeBD(self, feedRate, StepPerMM):
-		data = {}
+	def writeDB(self, feedRate, StepPerMM):
+		feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
+		feedExist = len(feedExist)
+		stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
+		stepExist = len(stepExist)
 
-		data["feedrate"] = feedRate
-		data["stepsPerMM"] = StepPerMM
-		
-		with open("laserDB.json", "w") as outfile:
-			self.json.dump(data, outfile)
+		if feedExist == 0 and stepExist == 0:
+			self.db.insert({'FeedRate': feedRate})
+			self.db.insert({'StepsPerMM': StepPerMM})
+
+		self.db.update({"FeedRate":feedRate},self.LaserQuery.FeedRate.exists())
+		self.db.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
 
 	def readDB(self):
 		with open('data.txt') as json_file:
