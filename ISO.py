@@ -1,5 +1,4 @@
  
-file_name = ('G-code_test.tap')
 class ISO:
 	def __init__(self, file):		#file has to be already imported
 		self.file = open(file, 'r')

@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
 import visual
 from movement import movement
 from Execute import *
@@ -9,9 +10,11 @@ from tinydb import TinyDB, Query
 class Main:
 	def __init__(self):
 		self.entry_widget = 0
-		self.file_name = ('G-code_test.tap')
+		self.folder_path = "G-code_test.tap"
+		#self.file_name = ('G-code_test.tap')
 
 		self.Z = False
+		self.start = False
 
 		self.root = Tk()
 		self.root.resizable(width=False, height=False)
@@ -27,10 +30,13 @@ class Main:
 		self.canvas.place(x=0, y=0)
 		#self.canvas.pack()#grid(row=0, rowspan=3, column=1, columnspan=3)
 
+		self.LaserQuery = Query()
+		self.db = TinyDB("C:/Users/U55816/Documents/git/Laser/laserDB.json")
+
 		self.line_x = visual.create_line_x(self.circle_pos, self.canvas, "gray30")
 		self.line_y = visual.create_line_y(self.circle_pos, self.canvas, "gray30")
 		self.circle = visual.create_circle(self.circle_pos, 5, self.canvas, "red2")
-		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y)
+		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y, self.db, self.LaserQuery)
 
 		self.control_frame()
 		self.main_frame()
@@ -38,10 +44,9 @@ class Main:
 		self.f_main.tkraise()
 		#self.pos_labels()
 
-		self.LaserQuery = Query()
-		self.db = TinyDB("C:/Users/U55816/Documents/git/Laser/laserDB.json")
+		
 
-		self.IS = ISO(self.file_name)
+		self.IS = ISO(self.folder_path)
 		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m)
 		self.root.bind("<KeyPress-Left>",lambda e: self.m.move_left())
 		self.root.bind("<KeyPress-Right>",lambda e: self.m.move_right())
@@ -62,6 +67,7 @@ class Main:
 		'''
 
 	def loop(self):
+		#print (self.folder_path)
 		self.update_pos_labels()
 		#self.writeBD(1,1)
 		self.simulate()
@@ -69,8 +75,9 @@ class Main:
 
 	def simulate(self):
 		pos = self.m.get_absolute_position()
-		#print(pos)
-		#self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
+		while self.start == True:
+			print(pos)
+			self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
 
 	def get_pos(self):
 		idk = m.get_coords()
@@ -132,10 +139,10 @@ class Main:
 		self.f_main = Frame(self.root, height = 480, width = 320, borderwidth = 1, highlightbackground="red",highlightthickness=1)
 		self.f_main.place(x=480, y=0)
 
-		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE")
+		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE", command = lambda: self.file_directory())
 		Button_upload.place(x = 10, y = 10, height = 60, width = 300)
 
-		Button_start = Button(self.f_main, text = "S")
+		Button_start = Button(self.f_main, text = "S", command = lambda: self.start_laser())
 		Button_pause = Button(self.f_main, text = "P")
 		Button_unpause = Button(self.f_main, text = "U")
 		Button_stop = Button(self.f_main, text = "ST")
@@ -244,6 +251,9 @@ class Main:
 		#add function to change variables in database and remember it
 
 	def writeDB(self, feedRate, StepPerMM):
+		self.m.change_SPM(StepPerMM)
+		self.m.change_feedrate(feedRate)
+		"""
 		feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
 		feedExist = len(feedExist)
 		stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
@@ -255,10 +265,17 @@ class Main:
 
 		self.db.update({"FeedRate":feedRate},self.LaserQuery.FeedRate.exists())
 		self.db.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
+		"""
 
-	def readDB(self):
-		with open('data.txt') as json_file:
-   			data = json.load(json_file)
-   			print (data)
+	def file_directory(self):
+		self.folder_path = filedialog.askdirectory()
+
+	def start_laser(self):
+		self.start = True
+"""
+	def stop_laser(self):
+		self.start = False
+"""
+
 
 app = Main()

@@ -1,16 +1,18 @@
 class movement:
-    def __init__(self, canvasName, circle_object, line_x, line_y):
-    	self.SPM = 80 #5 = default steps/mm
-    	self.absolute_position = {}
-    	self.x = 0
-    	self.y = 0
-    	self.F = 1000 #mm/min
-    	self.canvasName = canvasName
-    	self.circle = circle_object
-    	self.line_x = line_x
-    	self.line_y = line_y
-    	self.last_move = 0
-    	self.motion()		#calling move class to move objects
+    def __init__(self, canvasName, circle_object, line_x, line_y, DB, Query):
+        self.LaserQuery = Query
+        self.db = DB
+        self.SPM = 80 #5 = default steps/mm
+        self.absolute_position = {}
+        self.x = 0
+        self.y = 0
+        self.F = 1000 #mm/min
+        self.canvasName = canvasName
+        self.circle = circle_object
+        self.line_x = line_x
+        self.line_y = line_y
+        self.last_move = 0
+        self.motion()		#calling move class to move objects
     	#print(self.get_coords())
 
     def motion(self):
@@ -114,21 +116,43 @@ class movement:
     	return self.absolute_position
 
     def change_SPM(self, SPM):				#change steps/mm 1/16 = 80 SPM
-    	self.SPM = SPM
+        stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
+        stepExist = len(stepExist)
 
-    def get_SPM(self):
-    	return self.SPM
+        if stepExist == 0:
+            self.db.insert({'StepsPerMM':SPM})
+
+        self.db.update({"StepsPerMM":SPM}, self.LaserQuery.StepsPerMM.exists())
+
+    def get_values(self):
+        values = self.db.all()
+        for x in values:
+            if 'StepsPerMM' in x:
+                self.SPM = x['StepsPerMM']
+            elif 'FeedRate' in x:
+                self.F = x['FeedRate']
+
+        return False
     	
     def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
-    	self.F = feedrate
+        feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
+        feedExist = len(feedExist)
+
+        if feedExist == 0:
+            self.db.insert({'FeedRate': feedrate})
+
+        self.db.update({"FeedRate":feedrate},self.LaserQuery.FeedRate.exists())
 
     def get_feedrate(self):
         return self.F
 
+    def get_SPM(self):
+        return self.SPM
+
     #calculate mm per minute (feedrate) time for Execute.py
     def get_step_delay(self):
-        F = self.get_feedrate()
-        SPM = self.get_SPM()
+        F = self.F
+        SPM = self.SPM
         SPMin = F * SPM
         delay = 60 / int(SPMin)
         return delay
