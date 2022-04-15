@@ -135,13 +135,14 @@ class movement:
         return False
     	
     def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
-        feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
-        feedExist = len(feedExist)
+        self.F = feedrate
+#        feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
+#        feedExist = len(feedExist)
 
-        if feedExist == 0:
-            self.db.insert({'FeedRate': feedrate})
+#        if feedExist == 0:
+#            self.db.insert({'FeedRate': feedrate})
 
-        self.db.update({"FeedRate":feedrate},self.LaserQuery.FeedRate.exists())
+#        self.db.update({"FeedRate":feedrate},self.LaserQuery.FeedRate.exists())
 
     def get_feedrate(self):
         return self.F

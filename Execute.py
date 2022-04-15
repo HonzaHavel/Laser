@@ -66,10 +66,14 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			timing = 0
 			prevTime = 0
 			for r in range (SNx):
+				#self.movement.reposition(DPSx, DPSy)
+				if r - range_prev == 45:
+					self.burn()
+					range_prev = r
 				run = False
 				timeNow = time.time()
 				timing = timeNow - prevTime
-				while run is not True:
+				if run is not True:
 					if timing >= delay:
 						self.burn()
 						self.movement.reposition(DPSx, DPSy)
@@ -85,7 +89,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 				for r in range (StepsX):
 					self.movement.reposition(DPSx, 0)
 					sideways_error += sideways_variable
-					if r - range_prev == 10:
+					if r - range_prev == 45:
 						self.burn()
 						range_prev = r
 					if sideways_error >= 1:
@@ -97,7 +101,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 				for r in range (StepsY):
 					self.movement.reposition(0, DPSy)
 					sideways_error += sideways_variable
-					if r - range_prev == 10:
+					if r - range_prev == 45:
 						self.burn()
 						range_prev = r
 					if sideways_error >= 1:

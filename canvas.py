@@ -31,7 +31,7 @@ class Main:
 		#self.canvas.pack()#grid(row=0, rowspan=3, column=1, columnspan=3)
 
 		self.LaserQuery = Query()
-		self.db = TinyDB("C:/Users/U55816/Documents/git/Laser/laserDB.json")
+		self.db = TinyDB("laserDB.json")
 
 		self.line_x = visual.create_line_x(self.circle_pos, self.canvas, "gray30")
 		self.line_y = visual.create_line_y(self.circle_pos, self.canvas, "gray30")
@@ -75,7 +75,7 @@ class Main:
 
 	def simulate(self):
 		pos = self.m.get_absolute_position()
-		while self.start == True:
+		if self.start == True:
 			print(pos)
 			self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
 
@@ -251,8 +251,9 @@ class Main:
 		#add function to change variables in database and remember it
 
 	def writeDB(self, feedRate, StepPerMM):
-		self.m.change_SPM(StepPerMM)
-		self.m.change_feedrate(feedRate)
+		pass
+		#self.m.change_SPM(StepPerMM)
+		#self.m.change_feedrate(feedRate)
 		"""
 		feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
 		feedExist = len(feedExist)
