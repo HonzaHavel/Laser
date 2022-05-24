@@ -6,6 +6,7 @@ from movement import movement
 from Execute import *
 from ISO import *
 from tinydb import TinyDB, Query
+from DB import *
 
 class Main:
 	def __init__(self):
@@ -30,13 +31,14 @@ class Main:
 		self.canvas.place(x=0, y=0)
 		#self.canvas.pack()#grid(row=0, rowspan=3, column=1, columnspan=3)
 
-		self.LaserQuery = Query()
-		self.db = TinyDB("laserDB.json")
+		#self.LaserQuery = Query()
+		#self.db = TinyDB("laserDB.json")
+		self.DB = Database()
 
 		self.line_x = visual.create_line_x(self.circle_pos, self.canvas, "gray30")
 		self.line_y = visual.create_line_y(self.circle_pos, self.canvas, "gray30")
 		self.circle = visual.create_circle(self.circle_pos, 5, self.canvas, "red2")
-		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y, self.db, self.LaserQuery)
+		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y, self.DB)#, self.LaserQuery)
 
 		self.control_frame()
 		self.main_frame()
@@ -47,7 +49,7 @@ class Main:
 		
 
 		self.IS = ISO(self.folder_path)
-		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m)
+		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m, self.DB)
 		self.root.bind("<KeyPress-Left>",lambda e: self.m.move_left())
 		self.root.bind("<KeyPress-Right>",lambda e: self.m.move_right())
 		self.root.bind("<KeyPress-Up>",lambda e: self.m.move_up())
@@ -246,27 +248,29 @@ class Main:
 	def save(self):
 		feedrate = self.eF.get()
 		stepPerMM = self.eMM.get()
-		self.writeDB(feedrate, stepPerMM)
+		#self.writeDB(feedrate, stepPerMM)
+		self.DB.change_feedrate(feedrate)
+		self.DB.change_SPMM(stepPerMM)
 
 		#add function to change variables in database and remember it
 
-	def writeDB(self, feedRate, StepPerMM):
-		pass
-		#self.m.change_SPM(StepPerMM)
-		#self.m.change_feedrate(feedRate)
-		"""
-		feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
-		feedExist = len(feedExist)
-		stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
-		stepExist = len(stepExist)
+	# def writeDB(self, feedRate, StepPerMM):
+	# 	#pass
+	# 	#self.m.change_SPM(StepPerMM)
+	# 	#self.m.change_feedrate(feedRate)
+		
+	# 	feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
+	# 	feedExist = len(feedExist)
+	# 	stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
+	# 	stepExist = len(stepExist)
 
-		if feedExist == 0 and stepExist == 0:
-			self.db.insert({'FeedRate': feedRate})
-			self.db.insert({'StepsPerMM': StepPerMM})
+	# 	if feedExist == 0 and stepExist == 0:
+	# 		self.db.insert({'FeedRate': feedRate})
+	# 		self.db.insert({'StepsPerMM': StepPerMM})
 
-		self.db.update({"FeedRate":feedRate},self.LaserQuery.FeedRate.exists())
-		self.db.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
-		"""
+	# 	self.db.update({"FeedRate":feedRate},self.LaserQuery.FeedRate.exists())
+	# 	self.db.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
+		
 
 	def file_directory(self):
 		self.folder_path = filedialog.askdirectory()

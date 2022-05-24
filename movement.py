@@ -1,6 +1,6 @@
 class movement:
-    def __init__(self, canvasName, circle_object, line_x, line_y, DB, Query):
-        self.LaserQuery = Query
+    def __init__(self, canvasName, circle_object, line_x, line_y, DB):#, Query):
+        #self.LaserQuery = Query
         self.db = DB
         self.SPM = 80 #5 = default steps/mm
         self.absolute_position = {}
@@ -115,45 +115,47 @@ class movement:
     	self.absolute_position['Y'] = pos[1] + 5
     	return self.absolute_position
 
-    def change_SPM(self, SPM):				#change steps/mm 1/16 = 80 SPM
-        stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
-        stepExist = len(stepExist)
+    # def change_SPM(self, SPM):				#change steps/mm 1/16 = 80 SPM
+    #     self.SPM = SPM
+    #     stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
+    #     stepExist = len(stepExist)
 
-        if stepExist == 0:
-            self.db.insert({'StepsPerMM':SPM})
+    #     if stepExist == 0:
+    #         self.db.insert({'StepsPerMM':SPM})
 
-        self.db.update({"StepsPerMM":SPM}, self.LaserQuery.StepsPerMM.exists())
+    #     self.db.update({"StepsPerMM":SPM}, self.LaserQuery.StepsPerMM.exists())
 
-    def get_values(self):
-        values = self.db.all()
-        for x in values:
-            if 'StepsPerMM' in x:
-                self.SPM = x['StepsPerMM']
-            elif 'FeedRate' in x:
-                self.F = x['FeedRate']
+    # def get_values(self):
+    #     values = self.db.all()
+    #     for x in values:
+    #         if 'StepsPerMM' in x:
+    #             self.SPM = x['StepsPerMM']
+    #         elif 'FeedRate' in x:
+    #             self.F = x['FeedRate']
 
-        return False
+    #     return False
     	
-    def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
-        self.F = feedrate
-#        feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
-#        feedExist = len(feedExist)
+    # def change_feedrate(self, feedrate):	#insert F from canvas to change feedrate when change occurs, loop it to catch change
+    #     self.F = feedrate
+    #     feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
+    #     feedExist = len(feedExist)
 
-#        if feedExist == 0:
-#            self.db.insert({'FeedRate': feedrate})
+    #     if feedExist == 0:
+    #         self.db.insert({'FeedRate': feedrate})
 
-#        self.db.update({"FeedRate":feedrate},self.LaserQuery.FeedRate.exists())
+    #     self.db.update({"FeedRate":feedrate},self.LaserQuery.FeedRate.exists())
 
-    def get_feedrate(self):
-        return self.F
+    # def get_feedrate(self):
+    #     return self.F
 
-    def get_SPM(self):
-        return self.SPM
+    # def get_SPM(self):
+    #     return self.SPM
 
     #calculate mm per minute (feedrate) time for Execute.py
     def get_step_delay(self):
-        F = self.F
-        SPM = self.SPM
+        #self.get_values()
+        F = int(self.db.get_feedrate())
+        SPM = int(self.db.get_SPMM())
         SPMin = F * SPM
         delay = 60 / int(SPMin)
         return delay

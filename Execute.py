@@ -1,7 +1,7 @@
 #from ISO import *							#might not be needed - just for test
 import time							#inherit movement through canvas
 class Execute:				#will be executed by button in canvas - executin dictionary from process return
-	def __init__(self, circle, canvasName, visual, ISO, movement):		#execute will be checking for variable changed by stop button 
+	def __init__(self, circle, canvasName, visual, ISO, movement, DB):		#execute will be checking for variable changed by stop button 
 		self.visual = visual
 		self.canvasName = canvasName
 		self.Laser = False
@@ -9,6 +9,8 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.movement = movement
 		self.circle = circle
 		self.state = 0
+		self.DB = DB
+		self.Traveled_range = 0
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -36,7 +38,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			print("what now? :D")
 
 	def F(self, feedrate):
-		return (self.movement.change_feedrate(feedrate))
+		return (self.DB.change_feedrate(feedrate))
 
 	def Z(self, state):
 		self.state = int(state)
@@ -47,55 +49,103 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			self.Laser = True
 
 	def move_to_pos(self, x, y):
-		SPM = self.movement.get_SPM()
+		SPM = self.DB.get_SPMM()
 		ABS = self.movement.get_absolute_position()
 		Ax = ABS['X']
 		Ay = ABS['Y']		#position now
 		Mx = x - Ax
 		My = y - Ay			#mm to go in axis
-		SNx = round(Mx * SPM)
-		SNy = round(My * SPM) 		#used for motor steps - check +/-	potreba zaokrouhlit
+		SNx = round(Mx * float(SPM))
+		SNy = round(My * float(SPM)) 		#used for motor steps - check +/-	potreba zaokrouhlit
 		DPSx = Mx / abs(SNx) if SNx is not 0 else 0
 		DPSy = My / abs(SNy) if SNy is not 0 else 0		#distance per step for simulation
 		StepsX = abs(SNx)
 		StepsY = abs(SNy)
 		range_prev = 0
 		delay = self.movement.get_step_delay()
+		timing = 0
+		prevTime = 0
+		ra = 0
+		print (float(delay))
 		
 		if SNx == SNy:
-			timing = 0
-			prevTime = 0
 			for r in range (SNx):
 				#self.movement.reposition(DPSx, DPSy)
 				if r - range_prev == 45:
 					self.burn()
 					range_prev = r
-				run = False
 				timeNow = time.time()
 				timing = timeNow - prevTime
-				if run is not True:
-					if timing >= delay:
-						self.burn()
-						self.movement.reposition(DPSx, DPSy)
-						prevTime = timeNow
-						run = True
-					else:
-						pass
+				if timing >= delay:
+					#run = False
+					self.burn()
+					self.movement.reposition(DPSx, DPSy)
+					prevTime = timeNow
+				else:
+					r = r - 1
+
+		if SNx == SNy:
+			if self.Traveled_range < SNx:
+				if self.Traveled_range - range_prev == 45:
+					self.burn()
+					range_prev = self.Traveled_range
+				timeNow = time.time()
+				timing = timeNow - prevTime
+				if timing >= delay:
+					self.movement.reposition(DPSx, DPSy)
+					prevTime = timeNow
+					self.Traveled_range += 1
+					
+
+
+
+
+
+		# else:
+		# 	sideways_error = 0
+		# 	sideways_variable = abs(SNx) / abs(SNy) if abs(SNy) > abs(SNx) else abs(SNy) / abs(SNx)
+		# 	if StepsX > StepsY:
+		# 		for r in range (StepsX):
+		# 			timeNow = time.time()
+		# 			timing = timeNow - prevTime
+		# 			if timing >= delay:
+		# 				self.movement.reposition(DPSx, 0)
+		# 				sideways_error += sideways_variable
+		# 				prevTime = timeNow
+		# 				if r - range_prev == 45:
+		# 					self.burn()
+		# 					range_prev = r
+		# 				if sideways_error >= 1:
+		# 					self.movement.reposition(0, DPSy)
+		# 					#self.burn()
+		# 					sideways_error -= 1
+		# 			else:
+		# 				#r = r - 1
+		# 				pass
+
 
 		else:
 			sideways_error = 0
 			sideways_variable = abs(SNx) / abs(SNy) if abs(SNy) > abs(SNx) else abs(SNy) / abs(SNx)
 			if StepsX > StepsY:
-				for r in range (StepsX):
-					self.movement.reposition(DPSx, 0)
-					sideways_error += sideways_variable
-					if r - range_prev == 45:
-						self.burn()
-						range_prev = r
-					if sideways_error >= 1:
-						self.movement.reposition(0, DPSy)
-						#self.burn()
-						sideways_error -= 1
+				while ra < StepsX:
+					timeNow = time.time()
+					timing = timeNow - prevTime
+					print (delay)
+					#print (timeNow)
+					if timing >= delay:
+						ra += 1
+						self.movement.reposition(DPSx, 0)
+						sideways_error += sideways_variable
+						prevTime = timeNow
+						if ra - range_prev == 45:
+							self.burn()
+							range_prev = ra
+						if sideways_error >= 1:
+							self.movement.reposition(0, DPSy)
+							#self.burn()
+							sideways_error -= 1
+
 
 			elif StepsY > StepsX:
 				for r in range (StepsY):
