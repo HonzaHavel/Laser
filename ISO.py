@@ -25,7 +25,7 @@ class ISO:
 				toReturn['Y'] = command[1:]
 			elif command[0] == 'Z':
 				toReturn['Z'] = command[1:]
-		print(toReturn)
+		#print(toReturn)
 		return toReturn
 
 
@@ -34,6 +34,9 @@ class ISO:
 			self.count += 1
 		else:
 			self.ISO_done = True
+
+	def Actual_count(self):
+		return(self.count)
 
 	def Check(self):
 		return(self.ISO_done)

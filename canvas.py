@@ -78,7 +78,7 @@ class Main:
 	def simulate(self):
 		pos = self.m.get_absolute_position()
 		if self.start == True:
-			print(pos)
+			#print(pos)
 			self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
 
 	def get_pos(self):

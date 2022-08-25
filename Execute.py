@@ -11,27 +11,40 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.state = 0
 		self.DB = DB
 		self.Traveled_range = 0
+		self.sideways_error = 0
+		self.range_prev = 0
+		self.loops = 0
+		self.prevLoop = 0
+		self.StepsX = 0
+		self.StepsY = 0
+		self.DPSx = 0
+		self.DPSy = 0
+		self.total_range = 0
+		print ("init")
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
 			value = command['G']
 			self.G(value)
-			self.ISO.Add_count()
+			self.ready_for_next_CMD()
 
 		if 'F' in command:
 			value = command['F']
 			self.F(value)
-			self.ISO.Add_count()
+			self.ready_for_next_CMD()
 
 		if 'Z' in command:
 			value = command['Z']
+			print(type(value))
 			print(value)
+			print(int(value))
 			self.Z(value)
-			self.ISO.Add_count()
+			self.ready_for_next_CMD()
 
 		if 'X' in command or 'Y' in command:
 			self.move_to_pos(float(command['X']), float(command['Y']))
-			self.ISO.Add_count()
+			#self.ISO.Add_count()
+			#print(int('X' in command))
 
 	def G(self, value):
 		if value == 1:
@@ -42,123 +55,91 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 	def Z(self, state):
 		self.state = int(state)
-		if self.state == 10: #laser off
-			self.Laser = False
+		self.Laser = True if int(state) == 10 else False
+		#print(self.Laser)
+		# if self.state == 10: #laser off
+		# 	self.Laser = False
+		# 	print(self.Laser)
 
-		if self.state == 0: #laser on
-			self.Laser = True
+		# if self.state == 0: #laser on
+		# 	self.Laser = True
+		# 	print(self.Laser)
 
 	def move_to_pos(self, x, y):
 		SPM = self.DB.get_SPMM()
-		ABS = self.movement.get_absolute_position()
-		Ax = ABS['X']
-		Ay = ABS['Y']		#position now
-		Mx = x - Ax
-		My = y - Ay			#mm to go in axis
-		SNx = round(Mx * float(SPM))
-		SNy = round(My * float(SPM)) 		#used for motor steps - check +/-	potreba zaokrouhlit
-		DPSx = Mx / abs(SNx) if SNx is not 0 else 0
-		DPSy = My / abs(SNy) if SNy is not 0 else 0		#distance per step for simulation
-		StepsX = abs(SNx)
-		StepsY = abs(SNy)
-		range_prev = 0
+		if self.Traveled_range == 0:
+			ABS = self.movement.get_absolute_position()
+			Ax = ABS['X']
+			Ay = ABS['Y']		#position now
+			Mx = x - Ax
+			My = y - Ay			#mm to go in axis
+			SNx = round(Mx * float(SPM))
+			SNy = round(My * float(SPM)) 		#used for motor steps - check +/-	potreba zaokrouhlit
+			self.DPSx = Mx / abs(SNx) if SNx is not 0 else 0
+			self.DPSy = My / abs(SNy) if SNy is not 0 else 0		#distance per step for simulation
+			self.StepsX = abs(SNx)
+			self.StepsY = abs(SNy)
 		delay = self.movement.get_step_delay()
 		timing = 0
 		prevTime = 0
-		ra = 0
-		print (float(delay))
-		
-		if SNx == SNy:
-			for r in range (SNx):
-				#self.movement.reposition(DPSx, DPSy)
-				if r - range_prev == 45:
-					self.burn()
-					range_prev = r
-				timeNow = time.time()
-				timing = timeNow - prevTime
-				if timing >= delay:
-					#run = False
-					self.burn()
-					self.movement.reposition(DPSx, DPSy)
-					prevTime = timeNow
-				else:
-					r = r - 1
-
-		if SNx == SNy:
-			if self.Traveled_range < SNx:
-				if self.Traveled_range - range_prev == 45:
-					self.burn()
-					range_prev = self.Traveled_range
-				timeNow = time.time()
-				timing = timeNow - prevTime
-				if timing >= delay:
-					self.movement.reposition(DPSx, DPSy)
-					prevTime = timeNow
-					self.Traveled_range += 1
-					
-
-
-
-
-
-		# else:
-		# 	sideways_error = 0
-		# 	sideways_variable = abs(SNx) / abs(SNy) if abs(SNy) > abs(SNx) else abs(SNy) / abs(SNx)
-		# 	if StepsX > StepsY:
-		# 		for r in range (StepsX):
-		# 			timeNow = time.time()
-		# 			timing = timeNow - prevTime
-		# 			if timing >= delay:
-		# 				self.movement.reposition(DPSx, 0)
-		# 				sideways_error += sideways_variable
-		# 				prevTime = timeNow
-		# 				if r - range_prev == 45:
-		# 					self.burn()
-		# 					range_prev = r
-		# 				if sideways_error >= 1:
-		# 					self.movement.reposition(0, DPSy)
-		# 					#self.burn()
-		# 					sideways_error -= 1
-		# 			else:
-		# 				#r = r - 1
-		# 				pass
-
-
+		if self.StepsY != 0 and self.StepsX != 0:
+			sideways_variable = self.StepsX / self.StepsY if self.StepsY > self.StepsX else self.StepsY / self.StepsX
 		else:
-			sideways_error = 0
-			sideways_variable = abs(SNx) / abs(SNy) if abs(SNy) > abs(SNx) else abs(SNy) / abs(SNx)
-			if StepsX > StepsY:
-				while ra < StepsX:
-					timeNow = time.time()
-					timing = timeNow - prevTime
-					print (delay)
-					#print (timeNow)
-					if timing >= delay:
-						ra += 1
-						self.movement.reposition(DPSx, 0)
-						sideways_error += sideways_variable
-						prevTime = timeNow
-						if ra - range_prev == 45:
-							self.burn()
-							range_prev = ra
-						if sideways_error >= 1:
-							self.movement.reposition(0, DPSy)
-							#self.burn()
-							sideways_error -= 1
+			sideways_variable = 0
+
+		timeNow = time.time()
+		timing = timeNow - prevTime
+		if timing >= delay:
+			if self.StepsX == self.StepsY:
+				if self.Traveled_range < self.StepsX:
+					self.movement.reposition(self.DPSx, self.DPSy)
+					prevTime == timeNow
+					self.Traveled_range += 1
+					self.total_range += 1
+				else:
+					self.ready_for_next_CMD()
+
+			elif self.StepsX > self.StepsY:
+				if self.Traveled_range < self.StepsX:
+					self.movement.reposition(self.DPSx, 0)
+					self.Traveled_range += 1
+					self.total_range += 1
+					self.sideways_error += sideways_variable
+					if self.sideways_error >= 1:
+						self.movement.reposition(0, self.DPSy)
+						self.sideways_error -= 1
+				else:
+					self.ready_for_next_CMD()
+
+			elif self.StepsX < self.StepsY:
+				if self.Traveled_range < self.StepsY:
+					self.movement.reposition(0, self.DPSy)
+					self.Traveled_range += 1
+					self.total_range += 1
+					self.sideways_error += sideways_variable
+					if self.sideways_error >= 1:
+						self.movement.reposition(self.DPSx, 0)
+						self.sideways_error -= 1
+				else:
+					self.ready_for_next_CMD()
+
+			else:
+				print("MOVEMENT ERROR")
 
 
-			elif StepsY > StepsX:
-				for r in range (StepsY):
-					self.movement.reposition(0, DPSy)
-					sideways_error += sideways_variable
-					if r - range_prev == 45:
-						self.burn()
-						range_prev = r
-					if sideways_error >= 1:
-						self.movement.reposition(DPSx, 0)
-						#self.burn()
-						sideways_error -= 1
-			
+		# print ("total", self.total_range)
+		# print ("prev", self.range_prev)
+		# if self.Traveled_range - self.range_prev == 10:
+		# 			print("range")
+		# 			self.burn()
+		# 			self.range_prev = self.Traveled_range
+
+		self.loops += 1
+		if self.loops - self.prevLoop == 40:
+			self.prevLoop = self.loops
+			self.burn()
+		#print(self.Traveled_range)
+		#print(self.range_prev)
 
 	def count_steps(self, x, y):
 		pos = self.movement.get_absolute_position()
@@ -166,13 +147,28 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		steps_y = y - pos['Y']
 
 	def burn(self):				#will turn on laser
-		if self.Laser == True:
+		# self.visual.draw(self.circle, self.canvasName, "red2")
+		if self.state == 0:
+			#print("draw")
 			self.visual.draw(self.circle, self.canvasName, "red2")
 		else:
 			pass
+
+
+
+		#print(self.state)
 
 	def get_Z(self):
 		return(self.state)
 
 	def idk(self):
 		pass
+
+	def ready_for_next_CMD(self):
+		#print(self.ISO.Actual_count())
+		# print(self.Traveled_range)
+		# print(self.StepsX, self.StepsY)
+		self.ISO.Add_count()
+		self.sideways_error = 0
+		self.Traveled_range = 0
+		self.range_prev = 0
