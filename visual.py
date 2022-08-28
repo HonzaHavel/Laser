@@ -41,3 +41,25 @@ def draw(circle_object, canvasName, color):
 	y1 = pos[3] - 4.5
 
 	return canvasName.create_oval(x0, y0, x1, y1, fill = color)
+
+line_id = None
+line_points = []
+line_options = {}
+
+
+def draw_line(canvas, x, y):
+    global line_id
+    line_points.extend((x, y))
+    if line_id is not None:
+        canvas.delete(line_id)
+    line_id = canvas.create_line(line_points, fill="red", width=1, tag = "line") 
+
+
+def set_start(x, y):
+    line_points.extend((x, y))
+
+
+def end_line():
+    global line_id
+    line_points.clear()
+    line_id = None

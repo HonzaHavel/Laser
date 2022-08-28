@@ -35,16 +35,12 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 		if 'Z' in command:
 			value = command['Z']
-			print(type(value))
-			print(value)
-			print(int(value))
 			self.Z(value)
 			self.ready_for_next_CMD()
 
 		if 'X' in command or 'Y' in command:
 			self.move_to_pos(float(command['X']), float(command['Y']))
 			#self.ISO.Add_count()
-			#print(int('X' in command))
 
 	def G(self, value):
 		if value == 1:
@@ -56,14 +52,13 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 	def Z(self, state):
 		self.state = int(state)
 		self.Laser = True if int(state) == 10 else False
-		#print(self.Laser)
-		# if self.state == 10: #laser off
-		# 	self.Laser = False
-		# 	print(self.Laser)
 
-		# if self.state == 0: #laser on
-		# 	self.Laser = True
-		# 	print(self.Laser)
+		if self.state == 0:
+			pos = self.movement.get_absolute_position()
+			self.visual.set_start(pos["X"], pos["Y"])
+
+		elif self.state == 10:
+			self.visual.end_line()
 
 	def move_to_pos(self, x, y):
 		SPM = self.DB.get_SPMM()
@@ -80,6 +75,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			self.StepsX = abs(SNx)
 			self.StepsY = abs(SNy)
 		delay = self.movement.get_step_delay()
+		# print(delay)
 		timing = 0
 		prevTime = 0
 		if self.StepsY != 0 and self.StepsX != 0:
@@ -135,7 +131,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		# 			self.range_prev = self.Traveled_range
 
 		self.loops += 1
-		if self.loops - self.prevLoop == 40:
+		if self.loops - self.prevLoop == 4:
 			self.prevLoop = self.loops
 			self.burn()
 		#print(self.Traveled_range)
@@ -150,13 +146,11 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		# self.visual.draw(self.circle, self.canvasName, "red2")
 		if self.state == 0:
 			#print("draw")
-			self.visual.draw(self.circle, self.canvasName, "red2")
+			pos = self.movement.get_absolute_position()
+			self.visual.draw_line(self.canvasName, pos["X"], pos["Y"])
 		else:
 			pass
 
-
-
-		#print(self.state)
 
 	def get_Z(self):
 		return(self.state)
@@ -165,9 +159,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		pass
 
 	def ready_for_next_CMD(self):
-		#print(self.ISO.Actual_count())
-		# print(self.Traveled_range)
-		# print(self.StepsX, self.StepsY)
 		self.ISO.Add_count()
 		self.sideways_error = 0
 		self.Traveled_range = 0

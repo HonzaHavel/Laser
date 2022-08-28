@@ -25,15 +25,16 @@ class ISO:
 				toReturn['Y'] = command[1:]
 			elif command[0] == 'Z':
 				toReturn['Z'] = command[1:]
-		#print(toReturn)
 		return toReturn
-
 
 	def Add_count(self):
 		if self.count < (len(self.Lines)-1):
 			self.count += 1
 		else:
 			self.ISO_done = True
+
+	def reset_count(self):
+		self.count = 0
 
 	def Actual_count(self):
 		return(self.count)

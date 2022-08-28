@@ -15,14 +15,14 @@ class Database:
 
 		self.DB.update({"FeedRate":feedRate},self.LaserQuery.FeedRate.exists())
 
-	def change_SPMM(self, SetpPerMM):
-		stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
+	def change_SPMM(self, StepPerMM):
+		stepExist = self.DB.search(self.LaserQuery.StepsPerMM.exists())
 		stepExist = len(stepExist)
 
 		if stepExist == 0:
-			self.db.insert({'StepsPerMM': StepPerMM})
+			self.DB.insert({'StepsPerMM': StepPerMM})
 
-		self.db.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
+		self.DB.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
 
 	def change_Traveled_range(self, Traveled_range):
 		rangeExist = self.DB.search(self.LaserQuery.TraveledRange.exists())
@@ -34,13 +34,13 @@ class Database:
 		self.DB.update({"TraveledRange":Traveled_range},self.LaserQuery.TraveledRange.exists())
 
 	def change_prev_range(self, prev_range):
-		prevRangeExist = self.db.search(self.LaserQuery.PrevRange.exists())
+		prevRangeExist = self.DB.search(self.LaserQuery.PrevRange.exists())
 		prevRangeExist = len(prevRangeExist)
 
 		if prevRangeExist == 0:
-			self.db.insert({'PrevRange': prev_range})
+			self.DB.insert({'PrevRange': prev_range})
 
-		self.db.update({"PrevRange":prev_range},self.LaserQuery.PrevRange.exists())
+		self.DB.update({"PrevRange":prev_range},self.LaserQuery.PrevRange.exists())
 
 	def get_prev_range(self):
 		values = self.DB.all()

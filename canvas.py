@@ -5,7 +5,6 @@ import visual
 from movement import movement
 from Execute import *
 from ISO import *
-from tinydb import TinyDB, Query
 from DB import *
 
 class Main:
@@ -18,26 +17,24 @@ class Main:
 		self.start = False
 
 		self.root = Tk()
+		self.root.configure(background = "gray16")
 		self.root.resizable(width=False, height=False)
 		self.root.geometry("800x480")
 		self.width = 480
 		self.height = 480
 
-		self.circle_pos = [240, 240]
+		circle_pos = [240, 240]
 
 		self.visual = visual
 
-		self.canvas = Canvas(self.root, width = self.width, height = self.height)
+		self.canvas = Canvas(self.root, width = self.width, height = self.height, background = "gray18")
 		self.canvas.place(x=0, y=0)
-		#self.canvas.pack()#grid(row=0, rowspan=3, column=1, columnspan=3)
 
-		#self.LaserQuery = Query()
-		#self.db = TinyDB("laserDB.json")
 		self.DB = Database()
 
-		self.line_x = visual.create_line_x(self.circle_pos, self.canvas, "gray30")
-		self.line_y = visual.create_line_y(self.circle_pos, self.canvas, "gray30")
-		self.circle = visual.create_circle(self.circle_pos, 5, self.canvas, "red2")
+		self.line_x = visual.create_line_x(circle_pos, self.canvas, "gray30")
+		self.line_y = visual.create_line_y(circle_pos, self.canvas, "gray30")
+		self.circle = visual.create_circle(circle_pos, 5, self.canvas, "cyan2")
 		self.m = movement(self.canvas, self.circle, self.line_x, self.line_y, self.DB)#, self.LaserQuery)
 
 		self.control_frame()
@@ -69,27 +66,24 @@ class Main:
 		'''
 
 	def loop(self):
-		#print (self.folder_path)
-		self.update_pos_labels()
-		#self.writeBD(1,1)
+		if self.start == True:
+			self.update_pos_labels()
+			#self.writeBD(1,1)
 		self.simulate()
 		self.root.after(1, self.loop)
 
 	def simulate(self):
-		pos = self.m.get_absolute_position()
+		# pos = self.m.get_absolute_position()
 		if self.start == True:
-			#print(pos)
 			self.EXE.Exe_ISO(self.IS.Process(self.IS.Input_Line()))
 
 	def get_pos(self):
 		idk = m.get_coords()
 		pos = m.get_absolute_position()
-		#print(pos)
-		#print(type(idk))
 		root.after(20, get_pos)
 
 	def control_frame(self):
-		self.f_control = Frame(self.root, height = 480, width = 320, borderwidth = 1, highlightbackground="red",highlightthickness=1)
+		self.f_control = Frame(self.root, height = 480, width = 320, borderwidth = 1, background = "gray16")
 		self.f_control.place(x=480, y=0)
 
 		Label_X = Label(self.f_control, text = "X:", relief = "groove")
@@ -138,16 +132,16 @@ class Main:
 
 
 	def main_frame(self):
-		self.f_main = Frame(self.root, height = 480, width = 320, borderwidth = 1, highlightbackground="red",highlightthickness=1)
+		self.f_main = Frame(self.root, height = 480, width = 320, borderwidth = 1, background = "gray16")
 		self.f_main.place(x=480, y=0)
 
 		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE", command = lambda: self.file_directory())
 		Button_upload.place(x = 10, y = 10, height = 60, width = 300)
 
 		Button_start = Button(self.f_main, text = "S", command = lambda: self.start_laser())
-		Button_pause = Button(self.f_main, text = "P")
+		Button_pause = Button(self.f_main, text = "P", command = lambda: self.pause_laser())
 		Button_unpause = Button(self.f_main, text = "U")
-		Button_stop = Button(self.f_main, text = "ST")
+		Button_stop = Button(self.f_main, text = "ST", command = lambda: self.stop_laser())
 
 		Button_start.place(x = 10, y = 70, height = 48, width = 75)
 		Button_pause.place(x = 85, y = 70, height = 48, width = 75)
@@ -189,8 +183,9 @@ class Main:
 
 	def numeric_frame(self):
 		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1,highlightthickness=1)
-		self.f_numeric.place(x=560, y=300)
+		self.f_numeric.place(x=560, y=250)
 
+		Button_OK = Button(self.f_numeric, text = "OK", command = lambda:self.Enter(11))
 		Button_0 = Button(self.f_numeric, text = "0", command = lambda:self.Enter(0))
 		Button_1 = Button(self.f_numeric, text = "1", command = lambda:self.Enter(1))
 		Button_2 = Button(self.f_numeric, text = "2", command = lambda:self.Enter(2))
@@ -202,6 +197,7 @@ class Main:
 		Button_8 = Button(self.f_numeric, text = "8", command = lambda:self.Enter(8))
 		Button_9 = Button(self.f_numeric, text = "9", command = lambda:self.Enter(9))
 
+		Button_OK.place(x = 0, y = 180, height = 60, width = 60)
 		Button_0.place(x = 60, y = 180, height = 60, width = 60)
 		Button_1.place(x = 0, y = 0, height = 60, width = 60)
 		Button_2.place(x = 60, y = 0, height = 60, width = 60)
@@ -239,6 +235,9 @@ class Main:
 
 	def Enter(self, number):
 		#enter into entery
+		if number == 11:
+			self.f_main.tkraise()
+
 		if self.entry_widget == 0:
 			self.eF.insert(END, number)
 
@@ -252,35 +251,21 @@ class Main:
 		self.DB.change_feedrate(feedrate)
 		self.DB.change_SPMM(stepPerMM)
 
-		#add function to change variables in database and remember it
-
-	# def writeDB(self, feedRate, StepPerMM):
-	# 	#pass
-	# 	#self.m.change_SPM(StepPerMM)
-	# 	#self.m.change_feedrate(feedRate)
-		
-	# 	feedExist = self.db.search(self.LaserQuery.FeedRate.exists())
-	# 	feedExist = len(feedExist)
-	# 	stepExist = self.db.search(self.LaserQuery.StepsPerMM.exists())
-	# 	stepExist = len(stepExist)
-
-	# 	if feedExist == 0 and stepExist == 0:
-	# 		self.db.insert({'FeedRate': feedRate})
-	# 		self.db.insert({'StepsPerMM': StepPerMM})
-
-	# 	self.db.update({"FeedRate":feedRate},self.LaserQuery.FeedRate.exists())
-	# 	self.db.update({"StepsPerMM":StepPerMM},self.LaserQuery.StepsPerMM.exists())
-		
-
 	def file_directory(self):
 		self.folder_path = filedialog.askdirectory()
 
 	def start_laser(self):
 		self.start = True
-"""
+
+	def pause_laser(self):
+		self.start = False
+
 	def stop_laser(self):
 		self.start = False
-"""
+		self.IS.reset_count()
+		circle_pos = self.m.get_coords()
+		self.canvas.delete("line")
+
 
 
 app = Main()
