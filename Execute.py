@@ -20,7 +20,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.DPSx = 0
 		self.DPSy = 0
 		self.total_range = 0
-		print ("init")
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
