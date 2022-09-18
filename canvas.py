@@ -10,7 +10,6 @@ from DB import *
 class Main:
 	def __init__(self):
 		self.entry_widget = 0
-		self.folder_path = "G-code_test.tap"
 		#self.file_name = ('G-code_test.tap')
 
 		self.Z = False
@@ -45,7 +44,7 @@ class Main:
 
 		
 
-		self.IS = ISO(self.folder_path)
+		self.IS = ISO()
 		self.EXE = Execute(self.circle, self.canvas, self.visual, self.IS, self.m, self.DB)
 		self.root.bind("<KeyPress-Left>",lambda e: self.m.move_left())
 		self.root.bind("<KeyPress-Right>",lambda e: self.m.move_right())
@@ -252,7 +251,8 @@ class Main:
 		self.DB.change_SPMM(stepPerMM)
 
 	def file_directory(self):
-		self.folder_path = filedialog.askdirectory()
+		path = filedialog.askopenfilename()
+		self.IS.Input_folder_path(path)
 
 	def start_laser(self):
 		self.start = True

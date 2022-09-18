@@ -1,8 +1,8 @@
  
 class ISO:
-	def __init__(self, file):		#file has to be already imported
-		self.file = open(file, 'r')
-		self.Lines = self.file.readlines()
+	def __init__(self):		#file has to be already imported
+		self.file = None
+		self.Lines = None
 		self.count = 0				#ocunts lines send
 		self.ISO_done = False
 
@@ -41,6 +41,12 @@ class ISO:
 
 	def Check(self):
 		return(self.ISO_done)
+
+	def Input_folder_path (self, file):
+		self.file = file
+		file = file.split("/")
+		file = open(file[-1])
+		self.Lines = file.readlines()
 
 '''
 IS = ISO(file_name)
