@@ -20,6 +20,8 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.DPSx = 0
 		self.DPSy = 0
 		self.total_range = 0
+		self.line_points = []
+		self.StoreValue = False
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -162,3 +164,26 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.sideways_error = 0
 		self.Traveled_range = 0
 		self.range_prev = 0
+
+#----------This portion will only be executed after inputing folder path---------
+
+	def Draw_out(self, command):
+		if 'Z' in command:
+			#print(int(command['Z']))
+			if int(command['Z']) == 10:
+				if self.StoreValue == True:
+					line_id = self.canvasName.create_line(self.line_points, fill="blue", width=1, tag="upload_line")
+				self.StoreValue = False
+			elif int(command['Z']) == 0:
+				if self.StoreValue != True:
+					self.line_points.clear()
+					self.StoreValue = True
+		elif 'X' in command or 'Y' in command:
+			if self.StoreValue == True:
+				self.line_points.extend((command['X'], command['Y']))
+			else:
+				pass
+		self.ISO.Add_count() #add then one line is finished
+
+	def return_line_points(self):
+		return (self.line_points)

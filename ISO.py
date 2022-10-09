@@ -5,6 +5,7 @@ class ISO:
 		self.Lines = None
 		self.count = 0				#ocunts lines send
 		self.ISO_done = False
+		self.CreateDrawing = False
 
 	def Input_Line(self):
 		x = self.count
@@ -32,6 +33,7 @@ class ISO:
 			self.count += 1
 		else:
 			self.ISO_done = True
+			self.CreateDrawing = False
 
 	def reset_count(self):
 		self.count = 0
@@ -42,11 +44,18 @@ class ISO:
 	def Check(self):
 		return(self.ISO_done)
 
+	def Drawing_status(self):
+		return(self.CreateDrawing)
+
+
 	def Input_folder_path (self, file):
 		self.file = file
 		file = file.split("/")
 		file = open(file[-1])
 		self.Lines = file.readlines()
+		self.CreateDrawing = True
+		# while self.drawing == True:
+		# 	self.Draw_out(self.Process(self.Input_Line()))
 
 '''
 IS = ISO(file_name)

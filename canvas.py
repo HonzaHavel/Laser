@@ -253,6 +253,11 @@ class Main:
 	def file_directory(self):
 		path = filedialog.askopenfilename()
 		self.IS.Input_folder_path(path)
+		status = self.IS.Drawing_status()
+		while status == True:
+			self.EXE.Draw_out(self.IS.Process(self.IS.Input_Line()))
+			status = self.IS.Drawing_status()
+		self.IS.reset_count()
 
 	def start_laser(self):
 		self.start = True
