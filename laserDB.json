@@ -1,1 +1,1 @@
-{"_default": {"1": {"FeedRate": "1000"}, "2": {"StepsPerMM": "20"}}}
+{"_default": {"1": {"FeedRate": "1000"}, "2": {"StepsPerMM": "1"}}}

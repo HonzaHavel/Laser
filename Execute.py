@@ -22,6 +22,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.total_range = 0
 		self.line_points = []
 		self.StoreValue = False
+		self.old_state = 0
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -50,9 +51,16 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 	def F(self, feedrate):
 		return (self.DB.change_feedrate(feedrate))
 
-	def Z(self, state):
+	def Z(self, state): #send output for laser start here
+		self.old_state = self.state
 		self.state = int(state)
 		self.Laser = True if int(state) == 10 else False
+
+		if self.state == 20: #reverse value
+			if self.old_state == 10:
+				self.state = 0
+			elif self.old_state == 0:
+				self.state = 10
 
 		if self.state == 0:
 			pos = self.movement.get_absolute_position()
@@ -60,6 +68,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 		elif self.state == 10:
 			self.visual.end_line()
+		print(self.state)
 
 	def move_to_pos(self, x, y):
 		SPM = self.DB.get_SPMM()
@@ -76,7 +85,7 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			self.StepsX = abs(SNx)
 			self.StepsY = abs(SNy)
 		delay = self.movement.get_step_delay()
-		# print(delay)
+		#print(delay)
 		timing = 0
 		prevTime = 0
 		if self.StepsY != 0 and self.StepsX != 0:
@@ -87,10 +96,10 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		timeNow = time.time()
 		timing = timeNow - prevTime
 		if timing >= delay:
+			prevTime == timeNow
 			if self.StepsX == self.StepsY:
 				if self.Traveled_range < self.StepsX:
 					self.movement.reposition(self.DPSx, self.DPSy)
-					prevTime == timeNow
 					self.Traveled_range += 1
 					self.total_range += 1
 				else:
@@ -169,7 +178,6 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 	def Draw_out(self, command):
 		if 'Z' in command:
-			#print(int(command['Z']))
 			if int(command['Z']) == 10:
 				if self.StoreValue == True:
 					line_id = self.canvasName.create_line(self.line_points, fill="blue", width=1, tag="upload_line")

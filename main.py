@@ -10,7 +10,7 @@ from DB import *
 class Main:
 	def __init__(self):
 		self.entry_widget = 0
-		#self.file_name = ('G-code_test.tap')
+		self.control_type = 0 #control type 1 = movement, control type 2 = relocation of ISO
 
 		self.Z = False
 		self.start = False
@@ -65,11 +65,9 @@ class Main:
 		'''
 
 	def loop(self):
-		if self.start == True:
-			self.update_pos_labels()
-			#self.writeBD(1,1)
 		self.simulate()
 		self.root.after(1, self.loop)
+		self.update_pos_labels()
 
 	def simulate(self):
 		# pos = self.m.get_absolute_position()
@@ -101,9 +99,9 @@ class Main:
 		self.Label_Y.place(x = 40, y = 58, height = 48, width = 100)
 		self.Label_Z.place(x = 40, y = 106, height = 48, width = 100)
 
-		Button_back = Button(self.f_control, text = "BACK")
+		Button_back = Button(self.f_control, text = "BACK", command = lambda:self.f_main.tkraise())
 		Button_home = Button(self.f_control, text = "HOME")
-		Button_laser = Button(self.f_control, text = "LASER")
+		Button_laser = Button(self.f_control, text = "LASER", command = lambda:self.EXE.Z(20)) #state 20 = reverse value of laser
 
 		Button_back.place(x = 158, y = 10, height = 40, width = 150)
 		Button_home.place(x = 158, y = 62, height = 40, width = 150)
@@ -134,7 +132,7 @@ class Main:
 		self.f_main = Frame(self.root, height = 480, width = 320, borderwidth = 1, background = "gray16")
 		self.f_main.place(x=480, y=0)
 
-		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE", command = lambda: self.file_directory())
+		Button_upload = Button(self.f_main, text = "UPLOAD G-CODE",bg = "gray20", command = lambda: self.file_directory())
 		Button_upload.place(x = 10, y = 10, height = 60, width = 300)
 
 		Button_start = Button(self.f_main, text = "S", command = lambda: self.start_laser())
@@ -155,9 +153,9 @@ class Main:
 
 		Label_F.place(x = 10, y = 128, height = 40, width = 60)
 		Label_MM.place(x = 10, y = 166, height = 40, width = 60)
-		self.eF.place(x = 70, y = 127, height = 40, width = 60)
-		self.eMM.place(x = 70, y = 166, height = 40, width = 60)
-		Button_save.place(x = 10, y = 276, height = 60, width = 130)
+		self.eF.place(x = 70, y = 128, height = 40, width = 70)
+		self.eMM.place(x = 70, y = 166, height = 40, width = 70)
+		Button_save.place(x = 10, y = 206, height = 60, width = 130)
 
 		open = lambda x: open_numeric_keyboard(x)
 
@@ -179,6 +177,13 @@ class Main:
 		self.Label_X.place(x = 40, y = 326, height = 48, width = 100)
 		self.Label_Y.place(x = 40, y = 374, height = 48, width = 100)
 		self.Label_Z.place(x = 40, y = 422, height = 48, width = 100)
+
+		self.Button_Control = Button(self.f_main, text = "Control", relief = "groove", command = lambda:self.open_control(1))
+		self.Button_Move = Button(self.f_main, text = "Move", relief = "groove", command = lambda:self.open_control(2))
+
+		self.Button_Control.place(x = 160, y = 128, height = 60, width = 150)
+		self.Button_Move.place(x = 160, y = 188, height = 60, width = 150)
+
 
 	def numeric_frame(self):
 		self.f_numeric = Frame(self.root, height = 240, width = 180, borderwidth = 1,highlightthickness=1)
@@ -237,7 +242,7 @@ class Main:
 		if number == 11:
 			self.f_main.tkraise()
 
-		if self.entry_widget == 0:
+		elif self.entry_widget == 0:
 			self.eF.insert(END, number)
 
 		elif self.entry_widget == 1:
@@ -271,6 +276,53 @@ class Main:
 		circle_pos = self.m.get_coords()
 		self.canvas.delete("line")
 
+	def open_control(self, type): #control type 1 = movement, control type 2 = relocation of ISO
+		self.control_type = type
+		self.f_control.tkraise()
+
+	def control_move(self, direction): #determin if we are moving laser or iso and send out executive command
+		if self.control_type == 1: #move laser
+			match direction:
+				case 1:
+					self.m.Move_lUp()
+				case 2:
+					self.m.move_left()
+				case 3:
+					self.m.Move_lDown()
+				case 4:
+					self.m.move_up()
+				case 5:
+					self.m.Move_up()
+				case 6:
+					self.m.move_down()
+				case 7:
+					self.m.Move_rUp()
+				case 8:
+					self.m.move_right()
+				case 9:
+					self.m.Move_rDown()
+
+		elif self.control_type == 2:
+			pass
+			# match direction:
+			# 	case 1:
+			# 		self.m.Move_lUp()
+			# 	case 2:
+			# 		self.m.move_left()
+			# 	case 3:
+			# 		self.m.Move_lDown()
+			# 	case 4:
+			# 		self.m.move_up()
+			# 	case 5:
+			# 		self.m.Move_up()
+			# 	case 6:
+			# 		self.m.move_down()
+			# 	case 7:
+			# 		self.m.Move_rUp()
+			# 	case 8:
+			# 		self.m.move_right()
+			# 	case 9:
+			# 		self.m.Move_rDown()
 
 
 app = Main()
