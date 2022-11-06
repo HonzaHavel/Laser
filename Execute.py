@@ -23,6 +23,8 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 		self.line_points = []
 		self.StoreValue = False
 		self.old_state = 0
+		self.correction_x = 0
+		self.correction_y = 0
 
 	def Exe_ISO(self, command):
 		if 'G' in command:
@@ -41,7 +43,10 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 			self.ready_for_next_CMD()
 
 		if 'X' in command or 'Y' in command:
-			self.move_to_pos(float(command['X']), float(command['Y']))
+			x = float(float(command['X']) + self.correction_x)
+			y = float(float(command['Y']) + self.correction_y)
+			self.move_to_pos(x, y)
+			# self.move_to_pos(float(command['X']), float(command['Y']))
 			#self.ISO.Add_count()
 
 	def G(self, value):
@@ -195,3 +200,8 @@ class Execute:				#will be executed by button in canvas - executin dictionary fr
 
 	def return_line_points(self):
 		return (self.line_points)
+
+#----------Accept correction value from move function in main---------
+	def correction(self, x, y):
+		self.correction_x = self.correction_x + x
+		self.correction_y = self.correction_y + y

@@ -107,15 +107,15 @@ class Main:
 		Button_home.place(x = 158, y = 62, height = 40, width = 150)
 		Button_laser.place(x = 158, y = 114, height = 40, width = 150)
 		
-		Button_lUp = Button (self.f_control, text = "*", command=lambda: self.m.Move_lUp())
-		Button_left = Button (self.f_control, text = "L", command=lambda: self.m.move_left())
-		Button_lDown = Button (self.f_control, text = "*", command=lambda: self.m.Move_lDown())
-		Button_Up = Button (self.f_control, text = "U", command=lambda: self.m.move_up())
-		Button_0 = Button (self.f_control, text = "0,0", command=lambda: self.m.move_up())
-		Button_Down = Button (self.f_control, text = "D", command=lambda: self.m.move_down())
-		Button_rUp = Button (self.f_control, text = "*", command=lambda: self.m.Move_rUp())
-		Button_right = Button (self.f_control, text = "R", command=lambda: self.m.move_right())
-		Button_rDown = Button (self.f_control, text = "*", command=lambda: self.m.Move_rDown())
+		Button_lUp = Button (self.f_control, text = "*", command=lambda: self.control_move(1))
+		Button_left = Button (self.f_control, text = "L", command=lambda: self.control_move(2))
+		Button_lDown = Button (self.f_control, text = "*", command=lambda: self.control_move(3))
+		Button_Up = Button (self.f_control, text = "U", command=lambda: self.control_move(4))
+		Button_0 = Button (self.f_control, text = "0,0", command=lambda: self.control_move(5))
+		Button_Down = Button (self.f_control, text = "D", command=lambda: self.control_move(6))
+		Button_rUp = Button (self.f_control, text = "*", command=lambda: self.control_move(7))
+		Button_right = Button (self.f_control, text = "R", command=lambda: self.control_move(8))
+		Button_rDown = Button (self.f_control, text = "*", command=lambda: self.control_move(9))
 
 		Button_lUp.place(x = 8, y = 170, height = 100, width = 100)
 		Button_left.place(x = 8, y = 270, height = 100, width = 100)
@@ -303,26 +303,29 @@ class Main:
 					self.m.Move_rDown()
 
 		elif self.control_type == 2:
-			pass
-			# match direction:
-			# 	case 1:
-			# 		self.m.Move_lUp()
-			# 	case 2:
-			# 		self.m.move_left()
-			# 	case 3:
-			# 		self.m.Move_lDown()
-			# 	case 4:
-			# 		self.m.move_up()
-			# 	case 5:
-			# 		self.m.Move_up()
-			# 	case 6:
-			# 		self.m.move_down()
-			# 	case 7:
-			# 		self.m.Move_rUp()
-			# 	case 8:
-			# 		self.m.move_right()
-			# 	case 9:
-			# 		self.m.Move_rDown()
+			match direction:
+				case 1:
+					self.relocate(-5, -5)
+				case 2:
+					self.relocate(-5, 0)
+				case 3:
+					self.relocate(-5, 5)
+				case 4:
+					self.relocate(0, -5)
+				case 5:
+					self.relocate(0, -5)
+				case 6:
+					self.relocate(0, 5)
+				case 7:
+					self.relocate(5, -5)
+				case 8:
+					self.relocate(5, 0)
+				case 9:
+					self.relocate(5, 5)
+
+	def relocate(self, x, y):
+		self.canvas.move("upload_line", x, y)
+		self.EXE.correction(x, y)
 
 
 app = Main()
